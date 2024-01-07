@@ -1,0 +1,54 @@
+openapi: 3.0.0
+info:
+  title: Fidelite API
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /fidelite/verifyClientStatus:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Compensation'
+        description: Objet Compensation en entrée
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Compensation'
+          description: Succès
+        "400":
+          content:
+            text/plain:
+              example: "Erreur : Le statut du client est manquant."
+          description: Mauvaise requête
+        "500":
+          content:
+            text/plain:
+              example: Erreur interne du serveur.
+          description: Erreur interne du serveur
+      summary: Vérifie le statut du client
+      x-content-type: application/json
+      x-accepts: application/json
+components:
+  schemas:
+    Compensation:
+      example:
+        client:
+          status: status
+      properties:
+        client:
+          $ref: '#/components/schemas/Client'
+      type: object
+    Client:
+      example:
+        status: status
+      properties:
+        status:
+          type: string
+      type: object
+
