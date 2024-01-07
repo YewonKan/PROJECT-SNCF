@@ -3,10 +3,10 @@ package fr.pantheonsorbonne.ufr27.miage.model;
 import jakarta.persistence.*;
 
 @Entity
-public class Customer {
+public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idCustomer", nullable = false)
+    @Column(name = "idClient", nullable = false)
     private Integer id;
 
     @Column(name = "fname", nullable = false, length = 45)
@@ -15,16 +15,20 @@ public class Customer {
     @Column(name = "lname", nullable = false, length = 45)
     private String lname;
 
+    @Column(name = "status", nullable = true, length = 45)
+    private String status;
+
     @Column(name = "email", nullable = false)
     private String email;
 
-    public Customer(String fname, String lname, String email) {
+    public Client(String fname, String lname, String email, String status) {
         this.fname = fname;
         this.lname = lname;
         this.email = email;
+        this.status = status;
     }
 
-    public Customer() {
+    public Client() {
     }
 
     public String getEmail() {
@@ -49,6 +53,14 @@ public class Customer {
 
     public void setFname(String fname) {
         this.fname = fname;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Integer getId() {

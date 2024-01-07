@@ -1,6 +1,6 @@
 package fr.pantheonsorbonne.ufr27.miage.dao;
 
-import fr.pantheonsorbonne.ufr27.miage.model.Customer;
+import fr.pantheonsorbonne.ufr27.miage.model.Client;
 import fr.pantheonsorbonne.ufr27.miage.model.Ticket;
 
 import fr.pantheonsorbonne.ufr27.miage.model.Vendor;
@@ -31,9 +31,9 @@ public class TicketDAOImpl implements TicketDAO {
 
     @Override
     @Transactional
-    public Ticket emitTicketForCustomer(int transitionalTickerId, Customer customer) {
+    public Ticket emitTicketForCustomer(int transitionalTickerId, Client client) {
         Ticket t = em.find(Ticket.class, transitionalTickerId);
-        t.setIdCustomer(customer);
+        t.setIdCustomer(client);
         return t;
 
     }
