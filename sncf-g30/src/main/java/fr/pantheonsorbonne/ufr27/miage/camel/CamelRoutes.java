@@ -2,12 +2,12 @@ package fr.pantheonsorbonne.ufr27.miage.camel;
 
 
 import fr.pantheonsorbonne.ufr27.miage.dao.NoSuchTicketException;
-import fr.pantheonsorbonne.ufr27.miage.dto.Booking;
 import fr.pantheonsorbonne.ufr27.miage.dto.ETicket;
+import fr.pantheonsorbonne.ufr27.miage.dto.Ticket;
 import fr.pantheonsorbonne.ufr27.miage.exception.CustomerNotFoundException;
 import fr.pantheonsorbonne.ufr27.miage.exception.ExpiredTransitionalTicketException;
 import fr.pantheonsorbonne.ufr27.miage.exception.UnsuficientQuotaForVenueException;
-import fr.pantheonsorbonne.ufr27.miage.service.TicketingService;
+import fr.pantheonsorbonne.ufr27.miage.service.VerificationService;
 import org.apache.camel.CamelContext;
 import org.apache.camel.CamelExecutionException;
 import org.apache.camel.Exchange;
@@ -28,10 +28,10 @@ public class CamelRoutes extends RouteBuilder {
     String jmsPrefix;
 
     @Inject
-    BookingGateway bookingHandler;
+    FidelityGateway bookingHandler;
 
     @Inject
-    TicketingService ticketingService;
+    VerificationService verificationService;
 
     @Inject
     CamelContext camelContext;
@@ -46,7 +46,7 @@ public class CamelRoutes extends RouteBuilder {
                 .process(new ExpiredTransitionalTicketProcessor())
                 .setHeader("success", simple("false"))
                 .log("Clearning expired transitional ticket ${body}")
-                .bean(ticketingService, "cleanUpTransitionalTicket");
+                .bean(verificationService, "cleanUpTransitionalTicket");
 
         onException(UnsuficientQuotaForVenueException.class)
                 .handled(true)
@@ -68,15 +68,15 @@ public class CamelRoutes extends RouteBuilder {
         from("sjms2:" + jmsPrefix + "booking?exchangePattern=InOut")//
                 .autoStartup(isRouteEnabled)
                 .log("ticker received: ${in.headers}")//
-                .unmarshal().json(Booking.class)//
+                .unmarshal().json(Ticket.class)//
                 .bean(bookingHandler, "book").marshal().json()
         ;
 
 
-        from("sjms2:" + jmsPrefix + "ticket?exchangePattern=InOut")
-                .autoStartup(isRouteEnabled)
-                .unmarshal().json(ETicket.class)
-                .bean(ticketingService, "emitTicket").marshal().json();
+//        from("sjms2:" + jmsPrefix + "ticket?exchangePattern=InOut")
+//                .autoStartup(isRouteEnabled)
+//                .unmarshal().json(ETicket.class)
+//                .bean(ticketingService, "emitTicket").marshal().json();
 
 
         from("direct:ticketCancel")

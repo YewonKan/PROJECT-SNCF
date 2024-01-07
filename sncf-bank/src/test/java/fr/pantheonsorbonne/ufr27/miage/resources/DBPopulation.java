@@ -60,7 +60,7 @@ public class DBPopulation {
         em.persist(venue);
 
         VenueLineUpId venueLineUpId = new VenueLineUpId();
-        venueLineUpId.setArtist(radiohead);
+         venueLineUpId.setArtist(radiohead);
         venueLineUpId.setIdVenue(venue.getId());
 
         VenueLineUp lineUp = new VenueLineUp();

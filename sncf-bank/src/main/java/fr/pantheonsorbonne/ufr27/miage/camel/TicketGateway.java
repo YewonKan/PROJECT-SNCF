@@ -4,7 +4,7 @@ package fr.pantheonsorbonne.ufr27.miage.camel;
 import fr.pantheonsorbonne.ufr27.miage.dao.NoSuchTicketException;
 import fr.pantheonsorbonne.ufr27.miage.dto.CancelationNotice;
 import fr.pantheonsorbonne.ufr27.miage.dto.ETicket;
-import fr.pantheonsorbonne.ufr27.miage.exception.CustomerNotFoundException;
+import fr.pantheonsorbonne.ufr27.miage.exception.ClientNotFoundException;
 import fr.pantheonsorbonne.ufr27.miage.exception.ExpiredTransitionalTicketException;
 import fr.pantheonsorbonne.ufr27.miage.model.Ticket;
 import fr.pantheonsorbonne.ufr27.miage.service.TicketingService;
@@ -30,7 +30,7 @@ public class TicketGateway {
     CamelContext camelContext;
 
     @Handler
-    void emitTicket(ETicket eticket) throws NoSuchTicketException, CustomerNotFoundException.NoSeatAvailableException, ExpiredTransitionalTicketException {
+    void emitTicket(ETicket eticket) throws NoSuchTicketException, ClientNotFoundException.NoSeatAvailableException, ExpiredTransitionalTicketException {
         try {
             ticketingService.emitTicket(eticket);
         } catch (ExpiredTransitionalTicketException e) {

@@ -1,6 +1,6 @@
 package fr.pantheonsorbonne.ufr27.miage.dao;
 
-import fr.pantheonsorbonne.ufr27.miage.exception.CustomerNotFoundException;
+import fr.pantheonsorbonne.ufr27.miage.exception.ClientNotFoundException;
 import fr.pantheonsorbonne.ufr27.miage.model.Client;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -16,18 +16,18 @@ public class CustomerDAOImpl implements CustomerDAO {
     EntityManager em;
 
     @Override
-    public Client findMatchingCustomer(String email) throws CustomerNotFoundException {
+    public Client findMatchingClient(String email) throws ClientNotFoundException {
         try {
             Client c = (Client) em.createQuery("Select c from Client c where c.email=:email").setParameter("email", email).getSingleResult();
             return c;
         } catch (NoResultException e) {
-            throw new CustomerNotFoundException();
+            throw new ClientNotFoundException();
         }
     }
 
     @Override
     @Transactional
-    public Client createNewCustomer(String fname, String lname, String email, String status) {
+    public Client createNewClient(String fname, String lname, String email, String status) {
         Client c = new Client(fname, lname, email, status);
         em.persist(c);
         return c;
