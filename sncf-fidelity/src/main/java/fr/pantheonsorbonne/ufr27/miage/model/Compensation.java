@@ -10,7 +10,7 @@ public class Compensation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "client_id")
@@ -25,7 +25,7 @@ public class Compensation {
     @Column(name = "validity_date")
     private String validityDate;
 
-    public Compensation(Long id, Client client, String type, String details, String validityDate) {
+    public Compensation(Integer id, Client client, String type, String details, String validityDate) {
         this.id = id;
         this.client = client;
         this.type = type;
@@ -38,11 +38,11 @@ public class Compensation {
     }
 
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
