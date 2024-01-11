@@ -1,6 +1,6 @@
 package fr.pantheonsorbonne.ufr27.miage.model;
 
-import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -21,11 +21,11 @@ public class DelayNotification {
     private String reason;
 
     @Column(name = "creationTime", nullable = false)
-    private LocalDateTime creationTime;
+    private String creationTime;
 
 
 
-    public DelayNotification(String idTrain, int delayDuration, String reason, LocalDateTime creationTime) {
+    public DelayNotification(String idTrain, int delayDuration, String reason, String creationTime) {
         this.idTrain = idTrain;
         this.delayDuration = delayDuration;
         this.reason = reason;
@@ -66,11 +66,11 @@ public class DelayNotification {
         this.reason = reason;
     }
 
-    public LocalDateTime getCreationTime() {
+    public String getCreationTime() {
         return creationTime;
     }
 
-    public void setCreationTime(LocalDateTime creationTime) {
+    public void setCreationTime(String creationTime) {
         this.creationTime = creationTime;
     }
 }

@@ -6,6 +6,6 @@ import java.time.LocalDateTime;
 
 public interface DelayNotificationDAO {
 
-    DelayNotification createNewDelayNotification(String idTrain, int delayDuration, String reason, LocalDateTime creationTime);
+    DelayNotification createNewDelayNotification(String idTrain, int delayDuration, String reason, String creationTime);
 
 }
