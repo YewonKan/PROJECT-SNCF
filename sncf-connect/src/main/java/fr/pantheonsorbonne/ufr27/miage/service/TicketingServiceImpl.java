@@ -1,18 +1,16 @@
 package fr.pantheonsorbonne.ufr27.miage.service;
 
 import com.google.common.hash.Hashing;
+import fr.pantheonsorbonne.ufr27.miage.dao.CustomerDAO;
+import fr.pantheonsorbonne.ufr27.miage.dao.NoSuchTicketException;
+import fr.pantheonsorbonne.ufr27.miage.dao.TicketDAO;
 import fr.pantheonsorbonne.ufr27.miage.dto.ETicket;
 import fr.pantheonsorbonne.ufr27.miage.dto.TicketEmissionData;
 import fr.pantheonsorbonne.ufr27.miage.dto.TicketType;
 import fr.pantheonsorbonne.ufr27.miage.exception.CustomerNotFoundException;
 import fr.pantheonsorbonne.ufr27.miage.exception.ExpiredTransitionalTicketException;
-import fr.pantheonsorbonne.ufr27.miage.dao.CustomerDAO;
-import fr.pantheonsorbonne.ufr27.miage.dao.NoSuchTicketException;
-import fr.pantheonsorbonne.ufr27.miage.dao.TicketDAO;
-
 import fr.pantheonsorbonne.ufr27.miage.model.Customer;
 import fr.pantheonsorbonne.ufr27.miage.model.Ticket;
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -37,7 +35,7 @@ public class TicketingServiceImpl implements TicketingService {
     SeatPlacementService seatPlacementService;
 
     public String getKeyForTicket(Integer ticketId, Integer idVenue, Integer idVendor, Long salt) {
-        return Hashing.sha256().hashString(ticketId + String.valueOf(idVenue) + idVendor + salt + "MySuperSecret75013!", StandardCharsets.UTF_8).toString();
+        return Hashing.sha256().hashString(ticketId + "" + idVenue + "" + idVendor + "" + salt + "MySuperSecret75013!", StandardCharsets.UTF_8).toString();
     }
 
     @Override

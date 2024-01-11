@@ -1,6 +1,9 @@
 package fr.pantheonsorbonne.ufr27.miage.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 @Table(name = "VenueLineUp")
 @Entity
