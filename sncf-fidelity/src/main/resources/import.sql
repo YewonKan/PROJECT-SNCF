@@ -1,4 +1,4 @@
--- Create tables if not exist
+
 
 CREATE TABLE IF NOT EXISTS Client (
                                       id INT AUTO_INCREMENT PRIMARY KEY,
