@@ -1,8 +1,14 @@
 package fr.pantheonsorbonne.ufr27.miage.model;
 
 import jakarta.persistence.*;
+import java.util.Date;
 
-@NamedQueries({ @NamedQuery(name = "getDelayedTimeForTicketId", query = "SELECT d FROM DelayInformation d WHERE d.idTicket = ?1") })
+@NamedQueries({
+        @NamedQuery(
+                name = "getDelayedTimeForTrainAndTrajet",
+                query = "SELECT d FROM delay_information d WHERE d.idTrain = ?1 AND d.idTrajet = ?2"
+        )
+})
 @Entity
 public class DelayInformation {
     @Id
@@ -10,22 +16,27 @@ public class DelayInformation {
     @Column(name = "idNotification", nullable = false)
     private Integer id;
 
-    @Column(name = "idTicket", nullable = false)
-    private Integer idTicket;
+    @Column(name = "idTrajet", nullable = false)
+    private Integer idTrajet;
+
+    @Column(name = "idTrain", nullable = false)
+    private Integer idTrain;
 
     @Column(name = "delayedMinutes", nullable = false)
     private Integer delayedMinutes;
 
     @Column(name = "delayMotivation", nullable = false, length = 100)
     private String delayMotivation;
-    @Column(name = "refundStatus", nullable = false)
-    private boolean refunded;
 
-    public DelayInformation(Integer idTicket, Integer delayedMinutes, String delayMotivation, boolean refunded) {
-        this.idTicket = idTicket;
+    @Column(name = "delayedDate", nullable = false)
+    private Date delayedDate;
+
+    public DelayInformation(Integer idTrajet, Integer idTrain, Integer delayedMinutes, String delayMotivation, Date delayedDate) {
+        this.idTrajet = idTrajet;
+        this.idTrain = idTrain;
         this.delayedMinutes = delayedMinutes;
         this.delayMotivation = delayMotivation;
-        this.refunded = refunded;
+        this.delayedDate = delayedDate;
     }
 
     public DelayInformation() {
@@ -39,12 +50,20 @@ public class DelayInformation {
         this.id = id;
     }
 
-    public Integer getIdTicket() {
-        return idTicket;
+    public Integer getIdTrajet() {
+        return idTrajet;
     }
 
-    public void setIdTicket(Integer idTicket) {
-        this.idTicket = idTicket;
+    public void setIdTrajet(Integer idTrajet) {
+        this.idTrajet = idTrajet;
+    }
+
+    public Integer getIdTrain() {
+        return idTrain;
+    }
+
+    public void setIdTrain(Integer idTrain) {
+        this.idTrain = idTrain;
     }
 
     public Integer getDelayedMinutes() {
@@ -63,11 +82,11 @@ public class DelayInformation {
         this.delayMotivation = delayMotivation;
     }
 
-    public boolean isRefunded() {
-        return refunded;
+    public Date getDelayedDate() {
+        return delayedDate;
     }
 
-    public void setRefunded(boolean refunded) {
-        this.refunded = refunded;
+    public void setDelayedDate(Date delayedDate) {
+        this.delayedDate = delayedDate;
     }
 }

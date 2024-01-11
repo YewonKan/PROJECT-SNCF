@@ -11,7 +11,7 @@ public class DelayInformationDAOImpl implements DelayInformationDAO {
     EntityManager em;
 
     @Override
-    public DelayInformation findById(int ticketId) {
-        return em.find(DelayInformation.class, ticketId);
+    public DelayInformation findById(int trajetId, int trainId) {
+        return em.find(DelayInformation.class, trajetId);
     }
 }

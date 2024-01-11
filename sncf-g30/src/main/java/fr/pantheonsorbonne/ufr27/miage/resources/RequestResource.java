@@ -7,21 +7,18 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-@Path("DelayNotification")
-public class DelayedResource {
+@Path("RefundRequest")
+public class RequestResource {
 
 
-    @Inject
-    VerificationService verificationService;
 
     @Inject
     CalculationService calculationService;
 
-    @Path("train/{trainId}/trajet/{trajetId}")
-    @POST
+    @GET
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response getDelayNotifivation(@PathParam("trainId") int trainId,@PathParam("trajetId") int trajetId) {
-            double result = calculationService.getCompensationAmount(trajetId,trainId);
-            return Response.ok(result).build();
+    public Response get(@PathParam("trainId") int trainId,@PathParam("trajetId") int trajetId) {
+        double result = calculationService.getCompensationAmount(trajetId,trainId);
+        return Response.ok(result).build();
     }
 }

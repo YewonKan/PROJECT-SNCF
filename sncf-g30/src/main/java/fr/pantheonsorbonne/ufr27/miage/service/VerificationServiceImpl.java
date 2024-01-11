@@ -1,65 +1,47 @@
 package fr.pantheonsorbonne.ufr27.miage.service;
-
-
 import fr.pantheonsorbonne.ufr27.miage.dao.*;
-import fr.pantheonsorbonne.ufr27.miage.dto.Ticket;
-
 import fr.pantheonsorbonne.ufr27.miage.model.DelayInformation;
+import fr.pantheonsorbonne.ufr27.miage.model.RefundRequest;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 
 @ApplicationScoped
 public class VerificationServiceImpl implements VerificationService {
     @Inject
     DelayInformationDAO delayInformationDAO;
+    @Inject
+    RefundRequestDAO refundRequestDAO;
+    @Inject
+    MotivationDAO motivationDAO;
 
     @Override
-    public boolean checkIfDelayed(int ticketId) {
-        DelayInformation delayInformation = delayInformationDAO.findById(ticketId);
-        return delayInformation != null;
-    }
+    public boolean isEligibleForRefund(int trajetId, int trainId) {
+        DelayInformation delayInformation = delayInformationDAO.findById(trajetId, trainId);
 
-    @Override
-    @Transactional
-        public double getCompensPercentage(int ticketId){
-            DelayInformation delayInformation = delayInformationDAO.findById(ticketId);
-            int delayedMinutes = delayInformation.getDelayedMinutes();
-            if (delayInformation.getDelayedMinutes() >= 30 && delayedMinutes <= 59) {
-                return 0.25;
-            } else if (delayedMinutes > 60) {
-                return 0.50;
-            } else {
-                return 0.0;
-            }
+        // Check if the trip is delayed
+        boolean isDelayed = delayInformation != null;
+
+        if (isDelayed) {
+            RefundRequest refundRequest = refundRequestDAO.findRequestById(trajetId, trainId);
+
+            // Check if the request is within 60 days
+            long timeDifference = refundRequest.getRequestDate().getTime() - delayInformation.getDelayedDate().getTime();
+            long daysDifference = timeDifference / (1000 * 60 * 60 * 24);
+            boolean isWithin60Days = daysDifference <= 60;
+
+            // Check if the motivation is eligible
+            boolean isEligibleMotivation = motivationDAO.isEligibleMotivation(trajetId, trainId).getMotivationStatus();
+
+            return isWithin60Days && isEligibleMotivation;
         }
 
+        return false; // Not eligible if the trip is not delayed
+    }
 
-//    @Override
-//    @Transactional
-//    public Booking book(Booking booking) throws UnsuficientQuotaForVenueException {
-//        try {
-//            VenueQuota vq = venueQuotaDAO.getMatchingQuota(booking.getVendorId(), booking.getVenueId(), booking.getStandingTicketsNumber(), booking.getSeatingTicketsNumber());
-//            vq.setSeatingQuota(vq.getSeatingQuota() - booking.getSeatingTicketsNumber());
-//            vq.setStandingQuota(vq.getStandingQuota() - booking.getStandingTicketsNumber());
-//
-//            Venue venue = venueDAO.findById(booking.getVenueId());
-//            Vendor vendor = vendorDAO.findById(booking.getVendorId());
-//
-//
-//            for (int i = 0; i < booking.getStandingTicketsNumber(); i++) {
-//                Ticket ticket = ticketDAO.save(Instant.now().plus(10, ChronoUnit.HOURS), vendor, venue);
-//                booking.getStandingTransitionalTicket().add(ticket.getId());
-//            }
-//
-//            for (int i = 0; i < booking.getSeatingTicketsNumber(); i++) {
-//                Ticket ticket = ticketDAO.save(Instant.now().plus(10, ChronoUnit.MINUTES), vendor, venue);
-//                booking.getSeatingTransitionalTicket().add(ticket.getId());
-//            }
-//        } catch (NonUniqueResultException | NoResultException e) {
-//            throw new UnsuficientQuotaForVenueException(booking.getVenueId());
-//        }
-//        return booking;
-//    }
 
+    @Override
+    public RefundRequest.RefundStatus isRefundExecuted(int ticketId){
+        RefundRequest refundRequest =refundRequestDAO.findRequestByIdTicket(ticketId);
+        return refundRequest.getStatusRefund();
+    }
 }
