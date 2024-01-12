@@ -21,7 +21,6 @@ public class Customers {
     @Column(name = "phone", nullable = false)
     private String phone;
 
-
     public Integer getIdCostumer() {
         return idCostumer;
     }

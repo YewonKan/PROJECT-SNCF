@@ -4,4 +4,4 @@ REPLACE INTO Customers (fname, lname, email, phone) VALUES ('Eva', 'Williams', '
 REPLACE INTO Customers (fname, lname, email, phone) VALUES ('David', 'Brown', 'david.brown@email.com', 222222222);
 REPLACE INTO Trip (stationA, stationD, date, quota) VALUES ('Station A', 'Station D', '2024-01-15', 100);
 
-REPLACE INTO Tickets (idTrip, idCustomers) VALUES (1, 1);
+REPLACE INTO Tickets (idTrip, idCustomer) VALUES (1, 1);
