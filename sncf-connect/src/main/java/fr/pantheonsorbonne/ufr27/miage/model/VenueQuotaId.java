@@ -1,11 +1,10 @@
 package fr.pantheonsorbonne.ufr27.miage.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.ManyToOne;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 

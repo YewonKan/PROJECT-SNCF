@@ -32,18 +32,14 @@ Politique de Compensation pour les Retards dans le Système de Réservation de T
 
 ## Interfaces
 
-* Réseau -> G30 : Train ID, Trajet ID, retardMin, motivation, dateRetard
-* Connect  -> G30 : Ticket ID, Train ID, Trajet ID, prix, client ID (demande remboursement)
-* Fidelite -> G30 : Client ID, Type compensation (Bon d'achat -> Grand Voyageur + validité, chèque ->Autre statut)
-* G30-> Bank : Montant, Type remboursement(Fidelite), Client ID
-* Bank -> Client : Confirmation remboursement(Bon d'achat ou chèque), Client ID
-
-
-![]()
+```
+!!!! AJOUTER CETTE PARTIE !!!!
+```
+![](seqDiagram.png)
 
 ## Schéma relationnel
 
-![]()
+![](EER.png)
 
 ## Exigences fonctionnelles
 

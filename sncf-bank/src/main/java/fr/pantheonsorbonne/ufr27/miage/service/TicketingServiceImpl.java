@@ -4,13 +4,13 @@ import com.google.common.hash.Hashing;
 import fr.pantheonsorbonne.ufr27.miage.dto.ETicket;
 import fr.pantheonsorbonne.ufr27.miage.dto.TicketEmissionData;
 import fr.pantheonsorbonne.ufr27.miage.dto.TicketType;
-import fr.pantheonsorbonne.ufr27.miage.exception.CustomerNotFoundException;
+import fr.pantheonsorbonne.ufr27.miage.exception.ClientNotFoundException;
 import fr.pantheonsorbonne.ufr27.miage.exception.ExpiredTransitionalTicketException;
 import fr.pantheonsorbonne.ufr27.miage.dao.CustomerDAO;
 import fr.pantheonsorbonne.ufr27.miage.dao.NoSuchTicketException;
 import fr.pantheonsorbonne.ufr27.miage.dao.TicketDAO;
 
-import fr.pantheonsorbonne.ufr27.miage.model.Customer;
+import fr.pantheonsorbonne.ufr27.miage.model.Client;
 import fr.pantheonsorbonne.ufr27.miage.model.Ticket;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -42,13 +42,13 @@ public class TicketingServiceImpl implements TicketingService {
 
     @Override
     @Transactional
-    public TicketEmissionData emitTicket(ETicket eticket) throws ExpiredTransitionalTicketException, NoSuchTicketException, CustomerNotFoundException.NoSeatAvailableException {
+    public TicketEmissionData emitTicket(ETicket eticket) throws ExpiredTransitionalTicketException, NoSuchTicketException, ClientNotFoundException.NoSeatAvailableException {
 
-        Customer customer = null;
+        Client client = null;
         try {
-            customer = customerDAO.findMatchingCustomer(eticket.getEmail());
-        } catch (CustomerNotFoundException e) {
-            customer = customerDAO.createNewCustomer(eticket.getFname(), eticket.getLname(), eticket.getEmail());
+            client = customerDAO.findMatchingClient(eticket.getEmail());
+        } catch (ClientNotFoundException e) {
+            client = customerDAO.createNewClient(eticket.getFname(), eticket.getLname(), eticket.getEmail(), null);
         }
 
         Ticket ticket = ticketDAO.findTicket(eticket.getTransitionalTicketId());
@@ -56,7 +56,7 @@ public class TicketingServiceImpl implements TicketingService {
             throw new ExpiredTransitionalTicketException(eticket.getTransitionalTicketId());
         }
         Long salt = random.nextLong();
-        ticket = ticketDAO.emitTicketForCustomer(eticket.getTransitionalTicketId(), customer);
+        ticket = ticketDAO.emitTicketForCustomer(eticket.getTransitionalTicketId(), client);
         ticket.setTicketKey(this.getKeyForTicket(ticket.getId(), ticket.getIdVenue().getId(), ticket.getIdVendor().getId(), salt));
         if (Objects.equals(eticket.getType(), TicketType.SEATING)) {
             ticket.setSeatReference(seatPlacementService.bookSeat(ticket.getIdVenue().getId()));

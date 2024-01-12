@@ -27,7 +27,7 @@ public class Ticket {
 
     @ManyToOne(optional = true)
     @JoinColumn(name = "idCustomer", nullable = true)
-    private Customer idCustomer;
+    private Client idCustomer;
 
     public Ticket(Integer id) {
         this.id = id;
@@ -68,11 +68,11 @@ public class Ticket {
 
     private String ticketKey;
 
-    public Customer getIdCustomer() {
+    public Client getIdCustomer() {
         return idCustomer;
     }
 
-    public void setIdCustomer(Customer idCustomer) {
+    public void setIdCustomer(Client idCustomer) {
         this.idCustomer = idCustomer;
     }
 

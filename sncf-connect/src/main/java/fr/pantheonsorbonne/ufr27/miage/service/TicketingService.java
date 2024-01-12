@@ -6,6 +6,8 @@ import fr.pantheonsorbonne.ufr27.miage.dto.TicketEmissionData;
 import fr.pantheonsorbonne.ufr27.miage.exception.CustomerNotFoundException;
 import fr.pantheonsorbonne.ufr27.miage.exception.ExpiredTransitionalTicketException;
 
+import fr.pantheonsorbonne.ufr27.miage.model.Ticket;
+
 public interface TicketingService {
     TicketEmissionData emitTicket(ETicket eticket) throws ExpiredTransitionalTicketException, NoSuchTicketException, CustomerNotFoundException.NoSeatAvailableException;
 

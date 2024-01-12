@@ -9,7 +9,7 @@ import fr.pantheonsorbonne.ufr27.miage.exception.ExpiredTransitionalTicketExcept
 import fr.pantheonsorbonne.ufr27.miage.model.Ticket;
 
 public interface TicketingService {
-    TicketEmissionData emitTicket(ETicket eticket) throws ExpiredTransitionalTicketException, NoSuchTicketException, CustomerNotFoundException.NoSeatAvailableException;
+    TicketEmissionData emitTicket(ETicket eticket) throws ExpiredTransitionalTicketException, NoSuchTicketException, ClientNotFoundException.NoSeatAvailableException;
 
     void cleanUpTransitionalTicket(int transitionalTicketId);
 

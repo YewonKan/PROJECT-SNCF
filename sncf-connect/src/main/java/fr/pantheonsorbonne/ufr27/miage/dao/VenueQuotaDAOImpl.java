@@ -3,9 +3,11 @@ package fr.pantheonsorbonne.ufr27.miage.dao;
 
 import fr.pantheonsorbonne.ufr27.miage.model.Venue;
 import fr.pantheonsorbonne.ufr27.miage.model.VenueQuota;
+
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 import java.util.Collection;
 
