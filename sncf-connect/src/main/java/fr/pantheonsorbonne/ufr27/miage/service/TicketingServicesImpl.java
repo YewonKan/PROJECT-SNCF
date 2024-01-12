@@ -6,6 +6,7 @@ import fr.pantheonsorbonne.ufr27.miage.dao.CustomersDAO;
 import fr.pantheonsorbonne.ufr27.miage.dao.TicketsDAO;
 import fr.pantheonsorbonne.ufr27.miage.exception.NoAvailablePlaces;
 import fr.pantheonsorbonne.ufr27.miage.exception.TripNotFoundException;
+import fr.pantheonsorbonne.ufr27.miage.model.Customers;
 import fr.pantheonsorbonne.ufr27.miage.model.Tickets;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -28,11 +29,12 @@ public class TicketingServicesImpl implements TicketingServices {
 
     @Override
     @Transactional
-    public Tickets emitTicket(int idTrip, int idCustomer, String email, String fname, String lname, Double phone) throws CustomersNotFoundException, TripNotFoundException, NoAvailablePlaces {
+    public Tickets emitTicket(int idTrip, String fname, String lname, String email, int phone) throws CustomersNotFoundException, TripNotFoundException, NoAvailablePlaces {
+        Customers c = new Customers();
         try {
-           customersDAO.findMatchingCustomer(email);
+            c = customersDAO.findMatchingCustomer(email);
         } catch (CustomersNotFoundException e){
-            customersDAO.createNewCustomer(phone, fname, lname, email);
+            c = customersDAO.createNewCustomer( fname,  lname,  email,  phone);
         }
 
         if (tripDAO.findById(idTrip) == null) {
@@ -43,7 +45,8 @@ public class TicketingServicesImpl implements TicketingServices {
             throw new NoAvailablePlaces(tripDAO.findById(idTrip).getQuota());
         }
 
-        Tickets tickets = ticketsDAO.createTicket(idTrip, idCustomer);
+        System.out.println("ICI"+ idTrip);
+        Tickets tickets = ticketsDAO.createTicket(idTrip, c.getIdCostumer());
         System.out.println("Tickets created successfully: " + tickets);
         return tickets;
     }

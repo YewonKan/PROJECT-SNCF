@@ -8,27 +8,26 @@ public class Trip {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idTrip", nullable = false)
-    private Integer idTrip;
+    private int idTrip;
 
 
     @Column(name = "stationA")
     private String stationA;
 
-    @Column
-    @JoinColumn(name = "stationD")
+    @Column(name = "stationD")
     private String stationD;
 
     @Column(name = "date", nullable = false)
-    private Integer date;
+    private int date;
 
     @Column(name = "quota")
-    private Integer quota;
+    private int quota;
 
-    public Integer getIdTrip() {
+    public int getIdTrip() {
         return idTrip;
     }
 
-    public void setIdTrip(Integer idTrip) {
+    public void setIdTrip(int idTrip) {
         this.idTrip = idTrip;
     }
 
@@ -48,17 +47,17 @@ public class Trip {
         this.stationD = stationD;
     }
 
-    public Integer getDate() {
+    public int getDate() {
         return date;
     }
 
-    public void setDate(Integer date) {
+    public void setDate(int date) {
         this.date = date;
     }
 
-    public Integer getQuota() { return quota; }
+    public int getQuota() { return quota; }
 
-    public void setQuota(Integer quota) {
+    public void setQuota(int quota) {
         this.quota = quota;
     }
 }

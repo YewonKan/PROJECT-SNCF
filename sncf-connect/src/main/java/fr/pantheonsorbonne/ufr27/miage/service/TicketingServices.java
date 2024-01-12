@@ -9,5 +9,5 @@ import jakarta.transaction.Transactional;
 
 public interface TicketingServices {
     @Transactional
-    Tickets emitTicket(int idTrip, int idCustomer, String email, String fname, String lname, Double phone) throws CustomersNotFoundException, TripNotFoundException, NoAvailablePlaces;
+    Tickets emitTicket(int idTrip, String fname, String lname, String email, int phone) throws CustomersNotFoundException, TripNotFoundException, NoAvailablePlaces;
 }

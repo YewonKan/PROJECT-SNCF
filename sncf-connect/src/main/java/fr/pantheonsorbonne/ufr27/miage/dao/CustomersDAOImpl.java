@@ -27,7 +27,7 @@ public class CustomersDAOImpl implements CustomersDAO {
 
     @Override
     @Transactional
-    public Customers createNewCustomer(Double phone, String fname, String lname, String email) {
+    public Customers createNewCustomer(String fname, String lname, String email, int phone) {
         Customers c = new Customers(fname, lname, email, phone);
         em.persist(c);
         return c;

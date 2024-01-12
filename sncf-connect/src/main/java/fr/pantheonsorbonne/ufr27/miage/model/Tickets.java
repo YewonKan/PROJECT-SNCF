@@ -15,7 +15,7 @@ public class Tickets {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "idTrip", nullable = false)
-    private Customers idTrip;
+    private Trip idTrip;
 
     @ManyToOne(optional = true)
     @JoinColumn(name = "idCustomer", nullable = true)
@@ -81,13 +81,6 @@ public class Tickets {
     public void setCustomer(Customers customers) {
     }
 
-    public Customers getIdTrip() {
-        return idTrip;
-    }
-
-    public void setIdTrip(Customers idTrip) {
-        this.idTrip = idTrip;
-    }
 
     public Customers getIdCustomers() {
         return idCustomers;
@@ -95,5 +88,9 @@ public class Tickets {
 
     public void setIdCustomers(Customers idCustomers) {
         this.idCustomers = idCustomers;
+    }
+
+    public Trip getIdTrip() {
+        return idTrip;
     }
 }

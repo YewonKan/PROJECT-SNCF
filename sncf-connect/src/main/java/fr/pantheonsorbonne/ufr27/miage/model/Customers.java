@@ -19,10 +19,10 @@ public class Customers {
     private String email;
 
     @Column(name = "phone", nullable = false)
-    private Double phone;
+    private Integer phone;
 
 
-    public Customers(String fname, String lname, String email, Double phone) {
+    public Customers(String fname, String lname, String email, int phone) {
         this.fname = fname;
         this.lname = lname;
         this.email = email;
@@ -65,11 +65,15 @@ public class Customers {
         this.email = email;
     }
 
-    public Double getPhone() {
+    public int getPhone() {
         return phone;
     }
 
-    public void setPhone(Double phone) {
+    public void setPhone(int phone) {
+        this.phone = phone;
+    }
+
+    public void setPhone(Integer phone) {
         this.phone = phone;
     }
 }
