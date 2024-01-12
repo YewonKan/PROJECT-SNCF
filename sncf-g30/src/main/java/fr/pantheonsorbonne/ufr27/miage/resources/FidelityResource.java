@@ -2,7 +2,6 @@ package fr.pantheonsorbonne.ufr27.miage.resources;
 
 import fr.pantheonsorbonne.ufr27.miage.model.Client;
 import fr.pantheonsorbonne.ufr27.miage.model.Compensation;
-import fr.pantheonsorbonne.ufr27.miage.service.FidelityService;
 import fr.pantheonsorbonne.ufr27.miage.service.InsertService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
