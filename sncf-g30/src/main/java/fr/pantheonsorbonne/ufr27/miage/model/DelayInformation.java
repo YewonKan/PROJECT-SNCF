@@ -3,12 +3,12 @@ package fr.pantheonsorbonne.ufr27.miage.model;
 import jakarta.persistence.*;
 import java.util.Date;
 
-@NamedQueries({
-        @NamedQuery(
-                name = "getDelayedTimeForTrainAndTrajet",
-                query = "SELECT d FROM delay_information d WHERE d.idTrain = ?1 AND d.idTrajet = ?2"
-        )
-})
+//@NamedQueries({
+//        @NamedQuery(
+//                name = "getDelayedTimeForTrainAndTrajet",
+//                query = "SELECT d FROM delay_information d WHERE d.idTrain = ?1 AND d.idTrajet = ?2"
+//        )
+//})
 @Entity
 public class DelayInformation {
     @Id

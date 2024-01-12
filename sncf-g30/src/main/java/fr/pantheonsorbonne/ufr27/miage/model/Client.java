@@ -3,7 +3,7 @@ package fr.pantheonsorbonne.ufr27.miage.model;
 import jakarta.persistence.*;
 
 
-@NamedQueries({ @NamedQuery(name = "getDelayedTimeForTicketId", query = "SELECT d FROM DelayInformation d WHERE d.idTicket = ?1") })
+//@NamedQueries({ @NamedQuery(name = "getDelayedTimeForTicketId", query = "SELECT d FROM DelayInformation d WHERE d.idTicket = ?1") })
 @Entity
 public class Client {
 
