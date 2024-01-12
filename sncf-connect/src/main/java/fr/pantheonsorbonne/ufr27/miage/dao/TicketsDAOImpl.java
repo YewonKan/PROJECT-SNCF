@@ -14,7 +14,7 @@ import jakarta.transaction.Transactional;
 @ApplicationScoped
 public class TicketsDAOImpl implements TicketsDAO {
 
-    @PersistenceContext
+    @PersistenceContext(name = "mysql")
     EntityManager em;
 
     @Override
@@ -39,14 +39,16 @@ public class TicketsDAOImpl implements TicketsDAO {
     @Override
     @Transactional
     public Tickets createTicket(int idTrip, int idCustomer) throws CustomersNotFoundException, TripNotFoundException {
-        Trip trip = em.find(Trip.class, idTrip);
+        Trip trip = (Trip) em.createQuery("Select t from Trip t where t.idTrip=:idTrip").setParameter("idTrip", idTrip).getSingleResult();
         Customers customers = em.find(Customers.class, idCustomer);
         Tickets tickets = new Tickets();
         tickets.setIdTrip(trip);
         tickets.setIdCustomers(customers);
         em.persist(tickets);
         em.refresh(tickets);
-        System.out.println("Ticket Information:");
+
+
+       /* System.out.println("Ticket Information:");
         System.out.println("ID: " + tickets.getIdTicket());
         System.out.println("Trip Information:");
         System.out.println("StationA: " + trip.getStationA());
@@ -54,7 +56,7 @@ public class TicketsDAOImpl implements TicketsDAO {
         System.out.println("Date: " + trip.getDate());
         System.out.println("Customer Information:");
         System.out.println("First Name: " + customers.getFname());
-        System.out.println("Last Name: " + customers.getLname());
+        System.out.println("Last Name: " + customers.getLname());*/
         return tickets;
     }
 

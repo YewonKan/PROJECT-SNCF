@@ -15,54 +15,12 @@ public class Tickets {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "idTrip", nullable = false)
-    private Customers idTrip;
+    private Trip idTrip;
 
     @ManyToOne(optional = true)
     @JoinColumn(name = "idCustomer", nullable = true)
     private Customers idCustomers;
 
-    public Tickets(Integer idTicket) {
-        this.idTicket = idTicket;
-    }
-
-    public Tickets() {
-    }
-
-    @Column(nullable = true)
-    private Instant validUntil;
-
-    public Instant getValidUntil() {
-        return validUntil;
-    }
-
-    public void setValidUntil(Instant validUntil) {
-        this.validUntil = validUntil;
-    }
-
-    @Column(nullable = true)
-    private String seatReference;
-
-    public String getTicketKey() {
-        return ticketKey;
-    }
-
-    public void setTicketKey(String ticketKey) {
-        this.ticketKey = ticketKey;
-    }
-
-    private String ticketKey;
-
-
-    public String getSeatReference() {
-        return seatReference;
-    }
-
-    public void setSeatReference(String seatReference) {
-        this.seatReference = seatReference;
-    }
-
-    public void setIdTrip(Trip trip) {
-    }
 
     public Integer getIdTicket() {
         return idTicket;
@@ -72,20 +30,11 @@ public class Tickets {
         this.idTicket = idTicket;
     }
 
-
-
-    public void setTrip(Trip trip) {
-
-    }
-
-    public void setCustomer(Customers customers) {
-    }
-
-    public Customers getIdTrip() {
+    public Trip getIdTrip() {
         return idTrip;
     }
 
-    public void setIdTrip(Customers idTrip) {
+    public void setIdTrip(Trip idTrip) {
         this.idTrip = idTrip;
     }
 

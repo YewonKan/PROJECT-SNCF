@@ -1,3 +1,4 @@
+
 CREATE TABLE IF NOT EXISTS delay_information (
                                                  idNotification INT AUTO_INCREMENT PRIMARY KEY,
                                                  idTicket INT NOT NULL,

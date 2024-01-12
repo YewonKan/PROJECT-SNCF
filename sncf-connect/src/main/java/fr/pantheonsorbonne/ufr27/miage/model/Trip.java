@@ -10,16 +10,14 @@ public class Trip {
     @Column(name = "idTrip", nullable = false)
     private Integer idTrip;
 
-
     @Column(name = "stationA")
     private String stationA;
 
-    @Column
-    @JoinColumn(name = "stationD")
+    @Column(name = "stationD")
     private String stationD;
 
     @Column(name = "date", nullable = false)
-    private Integer date;
+    private String date;
 
     @Column(name = "quota")
     private Integer quota;
@@ -48,15 +46,17 @@ public class Trip {
         this.stationD = stationD;
     }
 
-    public Integer getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Integer date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public Integer getQuota() { return quota; }
+    public Integer getQuota() {
+        return quota;
+    }
 
     public void setQuota(Integer quota) {
         this.quota = quota;
