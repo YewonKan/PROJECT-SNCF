@@ -20,8 +20,8 @@ public class DelayedResource {
     @Path("train/{trainId}/trajet/{trajetId}")
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response getDelayNotifivation(@PathParam("trainId") int trainId,@PathParam("trajetId") int trajetId) {
-            double result = calculationService.getCompensationAmount(trajetId,trainId);
+    public Response getDelayNotifivation(@PathParam("trainId") int trainId,@PathParam("trajetId") int trajetId, @PathParam("trajetId") int ticketId) {
+            double result = calculationService.getCompensationAmount(trajetId,trainId,ticketId);
             return Response.ok(result).build();
     }
 }

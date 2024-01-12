@@ -1,9 +1,14 @@
 package fr.pantheonsorbonne.ufr27.miage.service;
 
 import fr.pantheonsorbonne.ufr27.miage.dao.CompensationDAO;
+import fr.pantheonsorbonne.ufr27.miage.dao.DelayInformationDAO;
 import fr.pantheonsorbonne.ufr27.miage.dao.FideliteDAO;
+import fr.pantheonsorbonne.ufr27.miage.dao.TicketInformationDAO;
+import fr.pantheonsorbonne.ufr27.miage.dto.CompensationDTO;
 import fr.pantheonsorbonne.ufr27.miage.model.Compensation;
 
+import fr.pantheonsorbonne.ufr27.miage.model.DelayInformation;
+import fr.pantheonsorbonne.ufr27.miage.model.TicketInformation;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -12,19 +17,60 @@ import jakarta.transaction.Transactional;
 public class InsertServiceImpl implements InsertService {
 
     @Inject
-    FideliteDAO fideliteDAO;
-    @Inject
     CompensationDAO compensationDAO;
+    @Inject
+    DelayInformationDAO delayInformationDAO;
+    @Inject
+    TicketInformationDAO ticketInformationDAO;
+
     @PersistenceContext
     private EntityManager entityManager;
 
+
+
     @Override
-    @Transactional
-    public Compensation insertCompensationType(String response,int ticketId) {
-//        Compensation newCompensation =
-//                new Compensation(response);
-//        compensationDAO.insertCompensation(newCompensation);
-//        return newCompensation;
-        return null;
+    public Compensation insertCompensationType(CompensationDTO compensationDTO) {
+        if(compensationDAO.findByIdTicket(compensationDTO.ticketId())==null){
+            Compensation newCompensation = new Compensation();
+            newCompensation.setTicketId(compensationDTO.ticketId());
+            newCompensation.setClient(compensationDTO.clientID());
+            newCompensation.setDetail(compensationDTO.detail());
+            newCompensation.setValidateDate(compensationDTO.validateDate());
+            newCompensation.setType(compensationDTO.type());
+            double amount = getCompensationAmount(compensationDTO.trajetId(), compensationDTO.trainId(), compensationDTO.ticketId());
+            newCompensation.setAmount(amount);
+            compensationDAO.insertCompensation(newCompensation);
+            return newCompensation;
+        }else {
+            throw new RuntimeException("Compensation with ticketId " + compensationDTO.ticketId() + " already requested");
+        }
+    }
+
+    @Override
+    public DelayInformation insertDelayInformation(DelayInformation delayInformation) {
+
+            DelayInformation newDelayInformation = new DelayInformation();
+            newDelayInformation.setIdTrajet(delayInformation.getIdTrajet());
+            newDelayInformation.setIdTrain(delayInformation.getIdTrain());
+            newDelayInformation.setDelayedMinutes(delayInformation.getDelayedMinutes());
+            newDelayInformation.setDelayMotivation(delayInformation.getDelayMotivation());
+            newDelayInformation.setDelayedDate(delayInformation.getDelayedDate());
+            delayInformationDAO.insertDelayInformation(newDelayInformation);
+            return newDelayInformation;
+          }
+
+
+    @Override
+    public double getCompensationAmount(int trajetId, int trainId, int ticketId) {
+        DelayInformation delayInformation = delayInformationDAO.findById(trajetId, trainId);
+        TicketInformation ticket = ticketInformationDAO.findRequestByIdTicket(ticketId);
+        int delayedMinutes = delayInformation.getDelayedMinutes();
+        if (delayInformation.getDelayedMinutes() >= 30 && delayedMinutes <= 59) {
+            return 0.25 * ticket.getPrix();
+        } else if (delayedMinutes > 60) {
+            return 0.50 * ticket.getPrix();
+        } else {
+            return 0.0;
+        }
     }
 }

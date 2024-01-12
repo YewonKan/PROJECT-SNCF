@@ -1,11 +1,6 @@
 package fr.pantheonsorbonne.ufr27.miage.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.Date;
 
@@ -20,11 +15,11 @@ public class Compensation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idNotification", nullable = false)
-    private int id;
+    @Column(name = "ticketId", nullable = false)
+    private int ticketId;
 
     @Column(name = "client", nullable = false)
-    private String client;
+    private int client;
 
     @Column(name = "type", nullable = false)
     private String type;
@@ -38,44 +33,38 @@ public class Compensation {
     @Column(name = "amount", nullable = false)
     private double amount;
 
-    @Column(name = "ticketId", nullable = false)
-    private int ticketId;
+
 
     @Enumerated(EnumType.STRING)
     @Column(name = "statusRefund", nullable = false)
     private RefundStatus statusRefund;
 
-    // Constructors
-    public Compensation(int id, String client, String type, String detail, Date validateDate, double amount, int ticketId, RefundStatus statusRefund) {
-        this.id = id;
+
+    @Column(name = "requestDate", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date requestDate;
+
+    public Compensation(int ticketId, int client, String type, String detail, Date validateDate, double amount, RefundStatus statusRefund) {
+        this.ticketId = ticketId;
         this.client = client;
         this.type = type;
         this.detail = detail;
         this.validateDate = validateDate;
         this.amount = amount;
-        this.ticketId = ticketId;
         this.statusRefund = statusRefund;
+    }
         //Because of the ValidDate, G30 always needs to send a request to Fidelity.
         // Additionally, the client's Fidelity status can change over time.
-    }
+
 
     public Compensation() {
     }
 
-    // Getter and Setter methods
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getClient() {
+    public int getClient() {
         return client;
     }
 
-    public void setClient(String client) {
+    public void setClient(int client) {
         this.client = client;
     }
 

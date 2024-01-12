@@ -1,9 +1,9 @@
 package fr.pantheonsorbonne.ufr27.miage.service;
 
 import fr.pantheonsorbonne.ufr27.miage.dao.DelayInformationDAO;
-import fr.pantheonsorbonne.ufr27.miage.dao.RefundRequestDAO;
+import fr.pantheonsorbonne.ufr27.miage.dao.TicketInformationDAO;
 import fr.pantheonsorbonne.ufr27.miage.model.DelayInformation;
-import fr.pantheonsorbonne.ufr27.miage.model.RefundRequest;
+import fr.pantheonsorbonne.ufr27.miage.model.TicketInformation;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -15,18 +15,18 @@ public class CalculationServiceImpl implements CalculationService {
     @Inject
     DelayInformationDAO delayInformationDAO;
     @Inject
-    RefundRequestDAO refundRequestDAO;
+    TicketInformationDAO ticketInformationDAO;
 
     @Override
     @Transactional
-    public double getCompensationAmount(int trajetId, int trainId){
+    public double getCompensationAmount(int trajetId, int trainId, int ticketId){
         DelayInformation delayInformation = delayInformationDAO.findById(trajetId, trainId);
-        RefundRequest refundRequest =refundRequestDAO.findRequestById(trajetId, trainId);
+        TicketInformation ticket = ticketInformationDAO.findRequestByIdTicket(ticketId);
         int delayedMinutes = delayInformation.getDelayedMinutes();
         if (delayInformation.getDelayedMinutes() >= 30 && delayedMinutes <= 59) {
-            return 0.25*refundRequest.getPrix();
+            return 0.25 * ticket.getPrix();
         } else if (delayedMinutes > 60) {
-            return 0.50*refundRequest.getPrix();
+            return 0.50 * ticket.getPrix();
         } else {
             return 0.0;
         }
