@@ -20,7 +20,6 @@ public class InstantAttributeConverter implements AttributeConverter<Instant, Ti
 
     @Override
     public Instant convertToEntityAttribute(Timestamp timestamp) {
-        //System.out.println(timestamp + " " + timestamp.toInstant() + " " + timestamp.getTimezoneOffset());
         return (timestamp == null ? null : timestamp.toInstant());
     }
 
