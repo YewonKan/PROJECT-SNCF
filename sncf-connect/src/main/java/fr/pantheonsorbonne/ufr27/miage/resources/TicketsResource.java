@@ -33,14 +33,5 @@ public class TicketsResource {
         }
     }
 
-
-
-
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String sayHello() {
-        return "Hello, World!";
-    }
-
 }
 

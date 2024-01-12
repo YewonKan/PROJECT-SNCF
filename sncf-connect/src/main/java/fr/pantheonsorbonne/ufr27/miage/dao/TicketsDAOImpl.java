@@ -40,24 +40,19 @@ public class TicketsDAOImpl implements TicketsDAO {
     @Transactional
     public Tickets createTicket(int idTrip, int idCustomer) throws CustomersNotFoundException, TripNotFoundException {
         Trip trip = (Trip) em.createQuery("Select t from Trip t where t.idTrip=:idTrip").setParameter("idTrip", idTrip).getSingleResult();
+
         Customers customers = em.find(Customers.class, idCustomer);
         Tickets tickets = new Tickets();
         tickets.setIdTrip(trip);
         tickets.setIdCustomers(customers);
+
+        tickets.setFname(customers.getFname());
+        tickets.setLname(customers.getLname());
+        tickets.setEmail(customers.getEmail());
+        tickets.setPhone(customers.getPhone());
+        tickets.setPrix(trip.getPrix());
+
         em.persist(tickets);
-        em.refresh(tickets);
-
-
-       /* System.out.println("Ticket Information:");
-        System.out.println("ID: " + tickets.getIdTicket());
-        System.out.println("Trip Information:");
-        System.out.println("StationA: " + trip.getStationA());
-        System.out.println("StationD: " + trip.getStationD());
-        System.out.println("Date: " + trip.getDate());
-        System.out.println("Customer Information:");
-        System.out.println("First Name: " + customers.getFname());
-        System.out.println("Last Name: " + customers.getLname());*/
         return tickets;
     }
-
 }
