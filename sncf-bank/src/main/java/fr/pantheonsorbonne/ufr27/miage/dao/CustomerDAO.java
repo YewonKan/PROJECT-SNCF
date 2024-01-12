@@ -1,10 +1,10 @@
 package fr.pantheonsorbonne.ufr27.miage.dao;
 
-import fr.pantheonsorbonne.ufr27.miage.exception.CustomerNotFoundException;
-import fr.pantheonsorbonne.ufr27.miage.model.Customer;
+import fr.pantheonsorbonne.ufr27.miage.exception.ClientNotFoundException;
+import fr.pantheonsorbonne.ufr27.miage.model.Client;
 
 public interface CustomerDAO {
-    Customer findMatchingCustomer(String email) throws CustomerNotFoundException;
+    Client findMatchingClient(String email) throws ClientNotFoundException;
 
-    Customer createNewCustomer(String fname, String lname, String email);
+    Client createNewClient(String fname, String lname, String email, String status);
 }
