@@ -27,8 +27,8 @@ public class CamelRoutes extends RouteBuilder {
     @ConfigProperty(name = "fr.pantheonsorbonne.ufr27.miage.jmsPrefix")
     String jmsPrefix;
 
-    @Inject
-    FidelityGateway bookingHandler;
+  /*  @Inject
+    FidelityGateway bookingHandler;*/
 
     @Inject
     VerificationService verificationService;
@@ -65,12 +65,12 @@ public class CamelRoutes extends RouteBuilder {
                 .setBody(simple("No seat is available"));
 
 
-        from("sjms2:" + jmsPrefix + "booking?exchangePattern=InOut")//
+    /*    from("sjms2:" + jmsPrefix + "booking?exchangePattern=InOut")//
                 .autoStartup(isRouteEnabled)
                 .log("ticker received: ${in.headers}")//
                 .unmarshal().json(Ticket.class)//
                 .bean(bookingHandler, "book").marshal().json()
-        ;
+        ;*/
 
 
 //        from("sjms2:" + jmsPrefix + "ticket?exchangePattern=InOut")
