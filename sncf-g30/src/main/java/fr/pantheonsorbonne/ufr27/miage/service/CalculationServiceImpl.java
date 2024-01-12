@@ -5,9 +5,13 @@ import fr.pantheonsorbonne.ufr27.miage.dao.RefundRequestDAO;
 import fr.pantheonsorbonne.ufr27.miage.model.DelayInformation;
 import fr.pantheonsorbonne.ufr27.miage.model.RefundRequest;
 import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 
 public class CalculationServiceImpl implements CalculationService {
+    @PersistenceContext
+    private EntityManager entityManager;
     @Inject
     DelayInformationDAO delayInformationDAO;
     @Inject

@@ -1,19 +1,52 @@
 package fr.pantheonsorbonne.ufr27.miage.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 import java.util.Date;
 
 public class Compensation {
 
+        public enum RefundStatus {
+        NOT_ELIGIBLE,
+        REFUNDED,
+        PENDING,
+        ELIGIBLE
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idNotification", nullable = false)
     private int id;
+
+    @Column(name = "client", nullable = false)
     private String client;
+
+    @Column(name = "type", nullable = false)
     private String type;
+
+    @Column(name = "detail", nullable = false)
     private String detail;
+
+    @Column(name = "validateDate", nullable = false)
     private Date validateDate;
-    private double amount; // New property
-    private int ticketId; // New property
+
+    @Column(name = "amount", nullable = false)
+    private double amount;
+
+    @Column(name = "ticketId", nullable = false)
+    private int ticketId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "statusRefund", nullable = false)
+    private RefundStatus statusRefund;
 
     // Constructors
-    public Compensation(int id, String client, String type, String detail, Date validateDate, double amount, int ticketId) {
+    public Compensation(int id, String client, String type, String detail, Date validateDate, double amount, int ticketId, RefundStatus statusRefund) {
         this.id = id;
         this.client = client;
         this.type = type;
@@ -21,6 +54,9 @@ public class Compensation {
         this.validateDate = validateDate;
         this.amount = amount;
         this.ticketId = ticketId;
+        this.statusRefund = statusRefund;
+        //Because of the ValidDate, G30 always needs to send a request to Fidelity.
+        // Additionally, the client's Fidelity status can change over time.
     }
 
     public Compensation() {
@@ -81,5 +117,13 @@ public class Compensation {
 
     public void setTicketId(int ticketId) {
         this.ticketId = ticketId;
+    }
+
+    public RefundStatus getStatusRefund() {
+        return statusRefund;
+    }
+
+    public void setStatusRefund(RefundStatus statusRefund) {
+        this.statusRefund = statusRefund;
     }
 }

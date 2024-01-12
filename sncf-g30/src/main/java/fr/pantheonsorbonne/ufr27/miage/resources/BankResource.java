@@ -1,7 +1,9 @@
 package fr.pantheonsorbonne.ufr27.miage.resources;
 
+import fr.pantheonsorbonne.ufr27.miage.model.Compensation;
 import fr.pantheonsorbonne.ufr27.miage.model.RefundRequest;
 import fr.pantheonsorbonne.ufr27.miage.service.CalculationService;
+import fr.pantheonsorbonne.ufr27.miage.service.UpdateService;
 import fr.pantheonsorbonne.ufr27.miage.service.VerificationService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -15,6 +17,8 @@ import java.net.URI;
 public class BankResource {
 
     @Inject
+    UpdateService updateService;
+    @Inject
     VerificationService verificationService;
 
     @Inject
@@ -27,23 +31,24 @@ public class BankResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response isTicketDelayed(int trainId, int trajetId,int ticketId) {
 
-        if (verificationService.isEligibleForRefund(trainId, trajetId)&&verificationService.isRefundExecuted(ticketId).equals(RefundRequest.RefundStatus.ELIGIBLE)) {
+        if (verificationService.isEligibleForRefund(trainId, trajetId)&&verificationService.isRefundExecuted(ticketId).equals(Compensation.RefundStatus.ELIGIBLE)) {
             URI bankUri = UriBuilder.fromResource(RefundRequest.class)
                     .path(RefundRequest.class, "get")
                     .build(ticketId);;
 
 //            bankGateway.sendRefundResultToBank(ticketId);
 
+            updateService.updateStatusRefunded(ticketId);
+
             return Response.created(bankUri)
-                    .entity(ticketId) // Optionnel, si vous souhaitez renvoyer les détails de la commande
+                    .entity(ticketId)
                     .build();
         } else {
-            return Response.status(422, "Refund request is not eligible").build();
+            return Response.status(Response.Status.FORBIDDEN).build();
         }
     }
     @Path(("/getPctCompensation"))
     @POST
-//    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getCompensPercentage(int trajetId, int trainId) {
         double result = calculationService.getCompensationAmount(trajetId,trainId);
         return Response.ok(result).build();

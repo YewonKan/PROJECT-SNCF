@@ -6,12 +6,6 @@ import java.util.Date;
 @Entity
 public class RefundRequest {
 
-    public enum RefundStatus {
-        NOT_ELIGIBLE,
-        REFUNDED,
-        PENDING,
-        ELIGIBLE
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,19 +31,14 @@ public class RefundRequest {
     @Temporal(TemporalType.TIMESTAMP)
     private Date requestDate;
 
-    @Column(name = "statusRefund", nullable = false)
-    private RefundStatus statusRefund;
-
-    public RefundRequest(Integer ticketId, Integer trainId, Integer trajetId, Double prix, Integer clientId, Date requestDate, RefundStatus statusRefund) {
+    public RefundRequest(Integer ticketId, Integer trainId, Integer trajetId, Double prix, Integer clientId, Date requestDate) {
         this.ticketId = ticketId;
         this.trainId = trainId;
         this.trajetId = trajetId;
         this.prix = prix;
         this.clientId = clientId;
         this.requestDate = requestDate;
-        this.statusRefund = statusRefund;
     }
-
     public RefundRequest() {
     }
 
@@ -109,11 +98,4 @@ public class RefundRequest {
         this.requestDate = requestDate;
     }
 
-    public RefundStatus getStatusRefund() {
-        return statusRefund;
-    }
-
-    public void setStatusRefund(RefundStatus statusRefund) {
-        this.statusRefund = statusRefund;
-    }
-}
+  }

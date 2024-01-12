@@ -1,5 +1,6 @@
 package fr.pantheonsorbonne.ufr27.miage.service;
 import fr.pantheonsorbonne.ufr27.miage.dao.*;
+import fr.pantheonsorbonne.ufr27.miage.model.Compensation;
 import fr.pantheonsorbonne.ufr27.miage.model.DelayInformation;
 import fr.pantheonsorbonne.ufr27.miage.model.RefundRequest;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -11,6 +12,8 @@ public class VerificationServiceImpl implements VerificationService {
     DelayInformationDAO delayInformationDAO;
     @Inject
     RefundRequestDAO refundRequestDAO;
+    @Inject
+    CompensationDAO compensationDAO;
     @Inject
     MotivationDAO motivationDAO;
 
@@ -40,8 +43,8 @@ public class VerificationServiceImpl implements VerificationService {
 
 
     @Override
-    public RefundRequest.RefundStatus isRefundExecuted(int ticketId){
-        RefundRequest refundRequest =refundRequestDAO.findRequestByIdTicket(ticketId);
-        return refundRequest.getStatusRefund();
+    public Compensation.RefundStatus isRefundExecuted(int ticketId){
+        Compensation compensation =compensationDAO.findByIdTicket(ticketId);
+        return compensation.getStatusRefund();
     }
 }

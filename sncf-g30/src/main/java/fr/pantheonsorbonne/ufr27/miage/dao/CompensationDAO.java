@@ -6,6 +6,9 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 
 public interface CompensationDAO {
-    Compensation findById(int trajetId, int trainId);
+    Compensation findByIdTicket(int ticketId);
 
+    Compensation setStatusRefund(int ticketId);
+
+    Compensation insertCompensation(Compensation compensation);
 }
