@@ -8,7 +8,6 @@ import fr.pantheonsorbonne.ufr27.miage.model.Ticket;
 import fr.pantheonsorbonne.ufr27.miage.model.Venue;
 import fr.pantheonsorbonne.ufr27.miage.model.VenueLineUp;
 import fr.pantheonsorbonne.ufr27.miage.model.VenueQuota;
-
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;

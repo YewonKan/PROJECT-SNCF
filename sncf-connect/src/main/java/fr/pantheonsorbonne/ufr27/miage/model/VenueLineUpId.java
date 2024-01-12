@@ -1,8 +1,10 @@
 package fr.pantheonsorbonne.ufr27.miage.model;
 
-import org.hibernate.Hibernate;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.ManyToOne;
 
-import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
