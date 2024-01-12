@@ -19,19 +19,8 @@ public class Customers {
     private String email;
 
     @Column(name = "phone", nullable = false)
-    private Integer phone;
+    private String phone;
 
-
-    public Customers(String fname, String lname, String email, int phone) {
-        this.fname = fname;
-        this.lname = lname;
-        this.email = email;
-        this.phone = phone;
-    }
-
-    public Customers() {
-
-    }
 
     public Integer getIdCostumer() {
         return idCostumer;
@@ -65,15 +54,12 @@ public class Customers {
         this.email = email;
     }
 
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    public void setPhone(Integer phone) {
-        this.phone = phone;
-    }
 }

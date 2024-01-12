@@ -26,7 +26,7 @@ public class TicketsGateway {
     CamelContext camelContext;
 
     @Handler
-    void emitTicket(int idTrip, int idCustomer, String fname, String lname, String email, int phone) throws CustomersNotFoundException, TripNotFoundException, NoAvailablePlaces {
+    void emitTicket(int idTrip, int idCustomer, String fname, String lname, String email, String phone) throws CustomersNotFoundException, TripNotFoundException, NoAvailablePlaces {
         try {
             ticketingServices.emitTicket(idTrip, fname,  lname,  email, phone);
         } catch (CustomersNotFoundException | TripNotFoundException e) {

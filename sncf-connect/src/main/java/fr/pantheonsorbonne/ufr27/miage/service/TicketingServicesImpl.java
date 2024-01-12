@@ -29,12 +29,12 @@ public class TicketingServicesImpl implements TicketingServices {
 
     @Override
     @Transactional
-    public Tickets emitTicket(int idTrip, String fname, String lname, String email, int phone) throws CustomersNotFoundException, TripNotFoundException, NoAvailablePlaces {
-        Customers c = new Customers();
+    public Tickets emitTicket(int idTrip, String fname, String lname, String email, String phone) throws CustomersNotFoundException, TripNotFoundException, NoAvailablePlaces {
+        Customers c;
         try {
             c = customersDAO.findMatchingCustomer(email);
         } catch (CustomersNotFoundException e){
-            c = customersDAO.createNewCustomer( fname,  lname,  email,  phone);
+            c = customersDAO.createNewCustomer(fname, lname, email, phone);
         }
 
         if (tripDAO.findById(idTrip) == null) {
