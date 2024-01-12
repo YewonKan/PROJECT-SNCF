@@ -1,8 +1,9 @@
 package fr.pantheonsorbonne.ufr27.miage.service;
 import fr.pantheonsorbonne.ufr27.miage.model.Compensation;
-import fr.pantheonsorbonne.ufr27.miage.model.RefundRequest;
+
+import java.util.Date;
 
 public interface VerificationService {
-    boolean isEligibleForRefund(int trajetId, int trainId);
+    boolean isEligibleForRefund(int trajetId, int trainId, Date currentDate);
     Compensation.RefundStatus isRefundExecuted(int clientId);
 }

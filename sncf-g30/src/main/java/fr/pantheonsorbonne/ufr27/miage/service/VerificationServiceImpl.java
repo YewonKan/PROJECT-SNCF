@@ -2,33 +2,35 @@ package fr.pantheonsorbonne.ufr27.miage.service;
 import fr.pantheonsorbonne.ufr27.miage.dao.*;
 import fr.pantheonsorbonne.ufr27.miage.model.Compensation;
 import fr.pantheonsorbonne.ufr27.miage.model.DelayInformation;
-import fr.pantheonsorbonne.ufr27.miage.model.RefundRequest;
+import fr.pantheonsorbonne.ufr27.miage.model.TicketInformation;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+
+import java.util.Date;
 
 @ApplicationScoped
 public class VerificationServiceImpl implements VerificationService {
     @Inject
     DelayInformationDAO delayInformationDAO;
     @Inject
-    RefundRequestDAO refundRequestDAO;
+    TicketInformationDAO ticketInformationDAO;
     @Inject
     CompensationDAO compensationDAO;
     @Inject
     MotivationDAO motivationDAO;
 
     @Override
-    public boolean isEligibleForRefund(int trajetId, int trainId) {
+    public boolean isEligibleForRefund(int trajetId, int trainId, Date currentDate) {
         DelayInformation delayInformation = delayInformationDAO.findById(trajetId, trainId);
 
         // Check if the trip is delayed
         boolean isDelayed = delayInformation != null;
 
         if (isDelayed) {
-            RefundRequest refundRequest = refundRequestDAO.findRequestById(trajetId, trainId);
+            TicketInformation ticket = ticketInformationDAO.findRequestById(trajetId, trainId);
 
             // Check if the request is within 60 days
-            long timeDifference = refundRequest.getRequestDate().getTime() - delayInformation.getDelayedDate().getTime();
+            long timeDifference = currentDate.getTime() - delayInformation.getDelayedDate().getTime();
             long daysDifference = timeDifference / (1000 * 60 * 60 * 24);
             boolean isWithin60Days = daysDifference <= 60;
 
