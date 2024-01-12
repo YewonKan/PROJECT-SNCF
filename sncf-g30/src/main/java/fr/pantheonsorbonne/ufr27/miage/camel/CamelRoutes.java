@@ -64,6 +64,10 @@ public class CamelRoutes extends RouteBuilder {
                 .setHeader("success", simple("false"))
                 .setBody(simple("No seat is available"));
 
+        from("sjms2:topic:" + jmsPrefix + "delayNotification?exchangePattern=InOnly")
+                .autoStartup(isRouteEnabled)
+                .log("Received delay notification: ${body}")
+                .process(new DelayNotificationProcessor());
 
     /*    from("sjms2:" + jmsPrefix + "booking?exchangePattern=InOut")//
                 .autoStartup(isRouteEnabled)
@@ -94,6 +98,18 @@ public class CamelRoutes extends RouteBuilder {
 
 
             exchange.getMessage().setBody(((ExpiredTransitionalTicketException) caused.getCause()).getExpiredTicketId());
+        }
+    }
+
+    public static class DelayNotificationProcessor implements Processor {
+
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            // Récupérer le corps du message (la notification de retard)
+            String delayNotification = exchange.getIn().getBody(String.class);
+
+            // Afficher la notification de retard
+            System.out.println("Received delay notification: " + delayNotification);
         }
     }
 }
