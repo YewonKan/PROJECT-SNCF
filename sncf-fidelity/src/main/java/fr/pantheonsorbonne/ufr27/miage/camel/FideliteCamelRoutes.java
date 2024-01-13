@@ -16,19 +16,19 @@ public class FideliteCamelRoutes extends RouteBuilder {
     String jmsPrefix;
 
     @Inject
-    FideliteGateway fideliteGateway;  // Injecting FideliteGateway
+    FideliteGateway fideliteGateway;
 
     @Override
     public void configure() throws Exception {
 
-        from("sjms2:queue:" + jmsPrefix + "g30Request")  // Listening to the JMS queue for G30 requests
+        from("sjms2:queue:" + jmsPrefix + "g30Request")
                 .autoStartup(isRouteEnabled)
-                .log("Received G30 request: ${body}")  // Log the received request
+                .log("Received G30 request: ${body}")
 
-                // Call the FideliteGateway to process the request
+
                 .bean(fideliteGateway, "processG30Request")
 
-                // Send the response to a JMS topic
+
                 .to("sjms2:topic:" + jmsPrefix + "fidelityResponse");
     }
 }

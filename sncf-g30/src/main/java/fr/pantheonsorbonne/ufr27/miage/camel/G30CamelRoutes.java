@@ -18,33 +18,33 @@ public class G30CamelRoutes extends RouteBuilder {
     @Override
     public void configure() throws Exception {
 
-        from("direct:g30Request")  // Route starting point
+        from("direct:g30Request")
                 .autoStartup(isRouteEnabled)
                 .log("Route G30CamelRoutes is called")
-                .to("sjms2:queue:" + jmsPrefix + "g30Request");  // Sending the request to the JMS queue
+                .to("sjms2:queue:" + jmsPrefix + "g30Request");
 
-        from("sjms2:queue:" + jmsPrefix + "g30Request")  // Listening to the JMS queue for G30 requests
+        from("sjms2:queue:" + jmsPrefix + "g30Request")
                 .autoStartup(isRouteEnabled)
-                .log("Received G30 request: ${body}")  // Log the received request
+                .log("Received G30 request: ${body}")
 
-                // Assume the response from Fidelity is in the message body
+
                 .choice()
                 .when(simple("${body} == 'Response from Fidelity'"))
-                .log("Received successful response from Fidelity: ${body}")  // Log successful response
-                .to("direct:processFidelityResponse")  // Process the successful response
+                .log("Received successful response from Fidelity: ${body}")
+                .to("direct:processFidelityResponse")
                 .otherwise()
-                .log("Received error response from Fidelity: ${body}")  // Log error response
+                .log("Received error response from Fidelity: ${body}")
                 .process(exchange -> {
-                    // Assuming Fidelity sends an error message in the body
+
                     String errorMessage = exchange.getIn().getBody(String.class);
-                    // You can handle the error message or throw an exception as needed
+
                     throw new RuntimeException("Error from Fidelity: " + errorMessage);
                 })
                 .end();
 
         from("direct:processFidelityResponse")
                 .log("Processing successful response from Fidelity: ${body}")
-                // Add your logic to process the successful response from Fidelity
-                .to("sjms2:topic:" + jmsPrefix + "g30Response");  // Sending the response to a JMS topic
+
+                .to("sjms2:topic:" + jmsPrefix + "fidelityResponse");
     }
 }

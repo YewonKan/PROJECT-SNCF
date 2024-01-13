@@ -17,27 +17,25 @@ import java.io.IOException;
 public class FideliteGateway {
 
     @Inject
-    FideliteServiceImpl fideliteService;  // Injecting FideliteService
+    FideliteServiceImpl fideliteService;
 
     @Inject
-    CamelContext camelContext;  // Injecting CamelContext
-
+    CamelContext camelContext;
     @ConfigProperty(name = "fr.pantheonsorbonne.ufr27.miage.jmsPrefix")
     String jmsPrefix;
 
     @Handler
     public void processG30Request(Client client) throws IOException, StatutClientManquantException {
-        // Ajoutez des logs pour vérifier l'appel et la réponse
+
         System.out.println("FideliteGateway - processG30Request called with client ID: " + client.getId());
 
-        // Call the FideliteService method to verify the client status
-        // You need to adapt this based on the actual structure of your FideliteService methods
+
         String response = String.valueOf(fideliteService.verifyClientStatusInternal(client));
 
-        // Log the response
+
         System.out.println("FideliteGateway - processG30Request response: " + response);
 
-        // Assuming you want to send the response to a JMS topic
+
         try (ProducerTemplate producerTemplate = camelContext.createProducerTemplate()) {
             producerTemplate.sendBodyAndHeader("sjms2:topic:" + jmsPrefix + "fidelityResponse", response, "clientId", client.getId());
         }
