@@ -14,27 +14,19 @@ import jakarta.inject.Inject;
 public class FideliteServiceImpl implements FideliteService {
 
     private final CompensationDAO compensationDAO;
-    private final ClientDAO clientDAO;
+    @Inject
+    ClientDAO clientDAO;
 
     @Inject
     public FideliteServiceImpl(CompensationDAO compensationDAO, ClientDAO clientDAO) {
         this.compensationDAO = compensationDAO;
         this.clientDAO = clientDAO;
     }
-    @Override
-    public String verifyClientStatusInternal(Client client) {
-        try {
-            Compensation compensation = verifyClientStatus(client);
-            // Process the compensation and return a response
-            return "Response from Fidelity: " + compensation.getClient();
-        } catch (StatutClientManquantException e) {
-            // Handle the exception and return an error response
-            return "Error from Fidelity: StatutClientManquantException";
-        }
-    }
+
 
     @Override
-    public Compensation verifyClientStatus(Client client) throws StatutClientManquantException {
+    public Compensation verifyClientStatus(int clientId) throws StatutClientManquantException {
+        Client client = clientDAO.findClientById(clientId);
         String status = client.getStatus();
 
         if (status == null || status.trim().isEmpty()) {

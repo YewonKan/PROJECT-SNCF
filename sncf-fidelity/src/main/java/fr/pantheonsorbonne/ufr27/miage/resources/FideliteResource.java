@@ -24,7 +24,7 @@ public class FideliteResource {
                 return Response.status(422).build();
             }
 
-            Compensation result = fideliteService.verifyClientStatus(compensation.getClient());
+            Compensation result = fideliteService.verifyClientStatus(compensation.getClient().getId());
             return Response.ok(result).build();
         } catch (StatutClientManquantException e) {
             return Response.status(422).build();

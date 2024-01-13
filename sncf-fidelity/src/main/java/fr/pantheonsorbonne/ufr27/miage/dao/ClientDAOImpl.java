@@ -2,6 +2,7 @@ package fr.pantheonsorbonne.ufr27.miage.dao;
 
 import fr.pantheonsorbonne.ufr27.miage.model.Client;
 
+import fr.pantheonsorbonne.ufr27.miage.model.Compensation;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -21,5 +22,9 @@ public class ClientDAOImpl implements ClientDAO {
         return c;
     }
 
-
+    @Override
+    @Transactional
+    public Client findClientById(int clientId){
+        return em.find(Client.class, clientId);
+    }
 }
