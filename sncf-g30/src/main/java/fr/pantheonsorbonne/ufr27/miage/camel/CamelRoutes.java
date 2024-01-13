@@ -1,6 +1,6 @@
 package fr.pantheonsorbonne.ufr27.miage.camel;
 
-
+import fr.pantheonsorbonne.ufr27.miage.dto.DelayNotification;
 import fr.pantheonsorbonne.ufr27.miage.dao.NoSuchTicketException;
 import fr.pantheonsorbonne.ufr27.miage.exception.CustomerNotFoundException;
 import fr.pantheonsorbonne.ufr27.miage.exception.ExpiredTransitionalTicketException;
@@ -12,7 +12,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -63,6 +63,10 @@ public class CamelRoutes extends RouteBuilder {
                 .setHeader("success", simple("false"))
                 .setBody(simple("No seat is available"));
 
+        from("sjms2:topic:" + jmsPrefix + "delayNotification?exchangePattern=InOnly")
+                .autoStartup(isRouteEnabled)
+                .log("Received delay notification: ${body}")
+                .process(new DelayNotificationProcessor());
 
     /*    from("sjms2:" + jmsPrefix + "booking?exchangePattern=InOut")//
                 .autoStartup(isRouteEnabled)
@@ -104,3 +108,40 @@ public class CamelRoutes extends RouteBuilder {
 //        }
 //    }
 //}
+
+
+        from("direct:ticketCancel")
+                .autoStartup(isRouteEnabled)
+                .marshal().json()
+                .to("sjms2:topic:" + jmsPrefix + "cancellation");
+
+    }
+
+    private static class ExpiredTransitionalTicketProcessor implements Processor {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            //https://camel.apache.org/manual/exception-clause.html
+            CamelExecutionException caused = (CamelExecutionException) exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Throwable.class);
+
+
+            exchange.getMessage().setBody(((ExpiredTransitionalTicketException) caused.getCause()).getExpiredTicketId());
+        }
+    }
+
+    public class DelayNotificationProcessor implements Processor {
+
+        private final ObjectMapper objectMapper = new ObjectMapper();
+
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            // Récupérer le corps du message (la notification de retard en JSON)
+            String delayNotificationJson = exchange.getIn().getBody(String.class);
+
+            // Désérialiser la notification de retard en objet DelayNotification
+            DelayNotification delayNotification = objectMapper.readValue(delayNotificationJson, DelayNotification.class);
+
+            // Vous pouvez maintenant utiliser l'objet DelayNotification comme nécessaire
+            System.out.println("Received delay notification: " + delayNotification);
+        }
+    }
+}
