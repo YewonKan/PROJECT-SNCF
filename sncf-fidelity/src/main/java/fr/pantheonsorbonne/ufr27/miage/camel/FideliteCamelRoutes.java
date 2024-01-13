@@ -25,6 +25,7 @@ public class FideliteCamelRoutes extends RouteBuilder {
     FidelityProcessor fidelityProcessor;
     @Inject
     CompensationDTO compensationDTO;
+
     @Inject
     FideliteGateway fideliteGateway;  // Injecting FideliteGateway
 
@@ -36,7 +37,7 @@ public class FideliteCamelRoutes extends RouteBuilder {
                 .log("Received G30 request: ${body}")
                 .marshal()
                 .json()
-                .to("sjms2:queue:"+jmsPrefix+"fidelityToG30")
+                .to("sjms2:queue:"+jmsPrefix+"fidelityToG30?exchangePattern=InOut")
                 .unmarshal()
                 .json()
                 .log("Response from fidelity : ${body}")
