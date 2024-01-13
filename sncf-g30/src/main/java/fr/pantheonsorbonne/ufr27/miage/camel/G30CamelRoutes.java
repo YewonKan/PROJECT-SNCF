@@ -1,6 +1,10 @@
 package fr.pantheonsorbonne.ufr27.miage.camel;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.pantheonsorbonne.ufr27.miage.dto.DelayNotification;
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
@@ -46,5 +50,25 @@ public class G30CamelRoutes extends RouteBuilder {
                 .log("Processing successful response from Fidelity: ${body}")
                 // Add your logic to process the successful response from Fidelity
                 .to("sjms2:topic:" + jmsPrefix + "g30Response");  // Sending the response to a JMS topic
+
+        from("sjms2:topic:" + jmsPrefix + "delayNotification?exchangePattern=InOnly")
+                .autoStartup(isRouteEnabled)
+                .log("Received delay notification: ${body}")
+                .process(new DelayNotificationProcessor());
+    }
+    public class DelayNotificationProcessor implements Processor {
+
+        private final ObjectMapper objectMapper = new ObjectMapper();
+
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            // Récupérer le corps du message (la notification de retard en JSON)
+            String delayNotificationJson = exchange.getIn().getBody(String.class);
+
+            // Désérialiser la notification de retard en objet DelayNotification
+            DelayNotification delayNotification = objectMapper.readValue(delayNotificationJson, DelayNotification.class);
+
+            System.out.println("Received delay notification: " + delayNotification);
+        }
     }
 }
