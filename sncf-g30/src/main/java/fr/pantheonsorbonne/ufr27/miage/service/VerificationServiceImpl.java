@@ -22,7 +22,6 @@ public class VerificationServiceImpl implements VerificationService {
     @Override
     public boolean isEligibleForRefund(int trajetId, int trainId, Date currentDate) {
         DelayInformation delayInformation = delayInformationDAO.findById(trajetId, trainId);
-
         // Check if the trip is delayed
         boolean isDelayed = delayInformation != null;
 
@@ -48,5 +47,10 @@ public class VerificationServiceImpl implements VerificationService {
     public Compensation.RefundStatus isRefundExecuted(int ticketId){
         Compensation compensation =compensationDAO.findByIdTicket(ticketId);
         return compensation.getStatusRefund();
+    }
+    @Override
+    public Compensation getCompensation(int ticketId){
+        Compensation compensation =compensationDAO.findByIdTicket(ticketId);
+        return compensation;
     }
 }
