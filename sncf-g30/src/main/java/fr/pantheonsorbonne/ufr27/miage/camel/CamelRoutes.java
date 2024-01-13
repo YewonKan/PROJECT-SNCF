@@ -1,6 +1,6 @@
 package fr.pantheonsorbonne.ufr27.miage.camel;
 
-
+import fr.pantheonsorbonne.ufr27.miage.dto.DelayNotification;
 import fr.pantheonsorbonne.ufr27.miage.dao.NoSuchTicketException;
 import fr.pantheonsorbonne.ufr27.miage.dto.ETicket;
 import fr.pantheonsorbonne.ufr27.miage.dto.Ticket;
@@ -14,7 +14,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -101,14 +101,19 @@ public class CamelRoutes extends RouteBuilder {
         }
     }
 
-    public static class DelayNotificationProcessor implements Processor {
+    public class DelayNotificationProcessor implements Processor {
+
+        private final ObjectMapper objectMapper = new ObjectMapper();
 
         @Override
         public void process(Exchange exchange) throws Exception {
-            // Récupérer le corps du message (la notification de retard)
-            String delayNotification = exchange.getIn().getBody(String.class);
+            // Récupérer le corps du message (la notification de retard en JSON)
+            String delayNotificationJson = exchange.getIn().getBody(String.class);
 
-            // Afficher la notification de retard
+            // Désérialiser la notification de retard en objet DelayNotification
+            DelayNotification delayNotification = objectMapper.readValue(delayNotificationJson, DelayNotification.class);
+
+            // Vous pouvez maintenant utiliser l'objet DelayNotification comme nécessaire
             System.out.println("Received delay notification: " + delayNotification);
         }
     }
