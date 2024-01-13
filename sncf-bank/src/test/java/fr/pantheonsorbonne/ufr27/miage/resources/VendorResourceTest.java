@@ -1,7 +1,6 @@
 package fr.pantheonsorbonne.ufr27.miage.resources;
 
 import fr.pantheonsorbonne.ufr27.miage.dto.Booking;
-import fr.pantheonsorbonne.ufr27.miage.dto.Gig;
 import fr.pantheonsorbonne.ufr27.miage.exception.UnsuficientQuotaForVenueException;
 import fr.pantheonsorbonne.ufr27.miage.service.BookingService;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -11,7 +10,6 @@ import io.restassured.response.Response;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.*;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
