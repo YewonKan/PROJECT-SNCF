@@ -1,6 +1,5 @@
 package fr.pantheonsorbonne.ufr27.miage.resources;
 
-import fr.pantheonsorbonne.ufr27.miage.dto.TicketValidationDataDTO;
 import fr.pantheonsorbonne.ufr27.miage.service.TicketingService;
 
 import jakarta.inject.Inject;

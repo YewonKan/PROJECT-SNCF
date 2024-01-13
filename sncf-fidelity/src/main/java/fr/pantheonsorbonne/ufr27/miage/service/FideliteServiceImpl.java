@@ -21,6 +21,17 @@ public class FideliteServiceImpl implements FideliteService {
         this.compensationDAO = compensationDAO;
         this.clientDAO = clientDAO;
     }
+    @Override
+    public String verifyClientStatusInternal(Client client) {
+        try {
+            Compensation compensation = verifyClientStatus(client);
+            // Process the compensation and return a response
+            return "Response from Fidelity: " + compensation.getClient();
+        } catch (StatutClientManquantException e) {
+            // Handle the exception and return an error response
+            return "Error from Fidelity: StatutClientManquantException";
+        }
+    }
 
     @Override
     public Compensation verifyClientStatus(Client client) throws StatutClientManquantException {
