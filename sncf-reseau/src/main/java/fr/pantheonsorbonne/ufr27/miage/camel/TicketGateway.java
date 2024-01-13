@@ -2,7 +2,6 @@ package fr.pantheonsorbonne.ufr27.miage.camel;
 
 
 import fr.pantheonsorbonne.ufr27.miage.dao.NoSuchTicketException;
-import fr.pantheonsorbonne.ufr27.miage.dto.CancelationNotice;
 import fr.pantheonsorbonne.ufr27.miage.dto.ETicket;
 import fr.pantheonsorbonne.ufr27.miage.exception.CustomerNotFoundException;
 import fr.pantheonsorbonne.ufr27.miage.exception.ExpiredTransitionalTicketException;
@@ -42,7 +41,7 @@ public class TicketGateway {
 
     public void cancelTicket(Ticket eticket) {
         try (ProducerTemplate producerTemplate = camelContext.createProducerTemplate()) {
-            producerTemplate.sendBodyAndHeader("direct:ticketCancel", new CancelationNotice(eticket.getIdCustomer().getEmail(), eticket.getId()), "vendorId", eticket.getIdVendor().getId());
+//            producerTemplate.sendBodyAndHeader("direct:ticketCancel", new CancelationNotice(eticket.getIdCustomer().getEmail(), eticket.getId()), "vendorId", eticket.getIdVendor().getId());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

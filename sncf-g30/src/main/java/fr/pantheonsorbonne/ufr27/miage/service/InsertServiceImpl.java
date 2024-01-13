@@ -58,7 +58,21 @@ public class InsertServiceImpl implements InsertService {
             newDelayInformation.setDelayedDate(delayInformation.getDelayedDate());
             delayInformationDAO.insertDelayInformation(newDelayInformation);
             return newDelayInformation;
-          }
+    }
+
+    @Override
+    public TicketInformation insertTicketInformation(TicketInformation ticketInformation) {
+        TicketInformation newTicketInformation = new TicketInformation(
+                ticketInformation.getTicketId(),
+                ticketInformation.getTrainId(),
+                ticketInformation.getTrajetId(),
+                ticketInformation.getPrix(),
+                ticketInformation.getClientId()
+        );
+        ticketInformationDAO.insertTicketinfo(newTicketInformation);
+        return newTicketInformation;
+    }
+
 
 
     @Override
