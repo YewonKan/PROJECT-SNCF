@@ -35,11 +35,9 @@ Politique de Compensation pour les Retards dans le Système de Réservation de T
 ```
 !!!! AJOUTER CETTE PARTIE !!!!
 ```
-![](seqDiagram.png)
 
-## Schéma relationnel
+![](DiagSequence.png)
 
-![](EER.png)
 
 ## Exigences fonctionnelles
 
