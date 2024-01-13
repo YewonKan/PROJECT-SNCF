@@ -1,38 +1,24 @@
-package fr.pantheonsorbonne.ufr27.miage.model;
+package fr.pantheonsorbonne.ufr27.miage.dto;
 
-import jakarta.persistence.*;
-import java.util.Date;
+import javax.xml.bind.annotation.XmlRootElement;
 
-@Entity
-@Table(name = "ticket_information")
-public class TicketInformation {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ticketId", nullable = false)
+@XmlRootElement
+public class TicketInformationDTO {
     private Integer ticketId;
-
-    @Column(name = "trainId", nullable = false)
     private Integer trainId;
-
-    @Column(name = "trajetId", nullable = false)
     private Integer trajetId;
-
-    @Column(name = "prix", nullable = false)
     private Double prix;
-
-    @Column(name = "clientId", nullable = false)
     private Integer clientId;
 
+    public TicketInformationDTO() {
+    }
 
-    public TicketInformation(Integer ticketId, Integer trainId, Integer trajetId, Double prix, Integer clientId) {
+    public TicketInformationDTO(Integer ticketId, Integer trainId, Integer trajetId, Double prix, Integer clientId) {
         this.ticketId = ticketId;
         this.trainId = trainId;
         this.trajetId = trajetId;
         this.prix = prix;
         this.clientId = clientId;
-    }
-    public TicketInformation() {
     }
 
     public Integer getTicketId() {
@@ -74,5 +60,4 @@ public class TicketInformation {
     public void setClientId(Integer clientId) {
         this.clientId = clientId;
     }
-
 }

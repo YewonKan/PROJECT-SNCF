@@ -3,7 +3,8 @@ package fr.pantheonsorbonne.ufr27.miage.model;
 import jakarta.persistence.*;
 
 import java.util.Date;
-
+@Entity
+@Table(name = "compensation")
 public class Compensation {
 
         public enum RefundStatus {

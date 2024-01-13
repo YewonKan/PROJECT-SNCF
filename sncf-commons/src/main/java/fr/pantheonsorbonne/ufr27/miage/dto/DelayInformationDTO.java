@@ -1,54 +1,24 @@
-package fr.pantheonsorbonne.ufr27.miage.model;
+package fr.pantheonsorbonne.ufr27.miage.dto;
 
-import jakarta.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
-
-//@NamedQueries({
-//        @NamedQuery(
-//                name = "getDelayedTimeForTrainAndTrajet",
-//                query = "SELECT d FROM delay_information d WHERE d.idTrain = ?1 AND d.idTrajet = ?2"
-//        )
-//})
-@Entity
-@Table(name = "delay_information")
-public class DelayInformation {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idNotification", nullable = false)
-    private Integer id;
-
-    @Column(name = "idTrajet", nullable = false)
+@XmlRootElement
+public class DelayInformationDTO {
     private Integer idTrajet;
-
-    @Column(name = "idTrain", nullable = false)
     private Integer idTrain;
-
-    @Column(name = "delayedMinutes", nullable = false)
     private Integer delayedMinutes;
-
-    @Column(name = "delayMotivation", nullable = false, length = 100)
     private String delayMotivation;
-
-    @Column(name = "delayedDate", nullable = false)
     private Date delayedDate;
 
-    public DelayInformation(Integer idTrajet, Integer idTrain, Integer delayedMinutes, String delayMotivation, Date delayedDate) {
+    public DelayInformationDTO() {
+    }
+
+    public DelayInformationDTO(Integer idTrajet, Integer idTrain, Integer delayedMinutes, String delayMotivation, Date delayedDate) {
         this.idTrajet = idTrajet;
         this.idTrain = idTrain;
         this.delayedMinutes = delayedMinutes;
         this.delayMotivation = delayMotivation;
         this.delayedDate = delayedDate;
-    }
-
-    public DelayInformation() {
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public Integer getIdTrajet() {
