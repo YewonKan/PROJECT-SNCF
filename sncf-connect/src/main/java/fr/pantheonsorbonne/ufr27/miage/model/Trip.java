@@ -22,6 +22,12 @@ public class Trip {
     @Column(name = "quota")
     private Integer quota;
 
+    @Column(name = "idTrain")
+    private Integer idTrain;
+
+    @Column(name = "prix")
+    private float prix;
+
     public Integer getIdTrip() {
         return idTrip;
     }
@@ -60,5 +66,21 @@ public class Trip {
 
     public void setQuota(Integer quota) {
         this.quota = quota;
+    }
+
+    public Integer getIdTrain() {
+        return idTrain;
+    }
+
+    public void setIdTrain(Integer idTrain) {
+        this.idTrain = idTrain;
+    }
+
+    public float getPrix() {
+        return prix;
+    }
+
+    public void setPrix(float prix) {
+        this.prix = prix;
     }
 }
