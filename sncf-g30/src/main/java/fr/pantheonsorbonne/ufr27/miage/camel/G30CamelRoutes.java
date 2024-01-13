@@ -45,6 +45,6 @@ public class G30CamelRoutes extends RouteBuilder {
         from("direct:processFidelityResponse")
                 .log("Processing successful response from Fidelity: ${body}")
                 // Add your logic to process the successful response from Fidelity
-                .to("sjms2:topic:" + jmsPrefix + "g30Response");  // Sending the response to a JMS topic
+                .to("sjms2:topic:" + jmsPrefix + "fidelityResponse");  // Sending the response to a JMS topic
     }
 }

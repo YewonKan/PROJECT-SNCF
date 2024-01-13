@@ -64,24 +64,13 @@ public class CamelRoutes extends RouteBuilder {
                 .setBody(simple("No seat is available"));
 
 
-        from("sjms2:" + jmsPrefix + "booking?exchangePattern=InOut")//
-                .autoStartup(isRouteEnabled)
-                .log("ticker received: ${in.headers}")//
-                .unmarshal().json(Booking.class)//
-                .bean(bookingHandler, "book").marshal().json()
-        ;
+//        from("sjms2:" + jmsPrefix + "booking?exchangePattern=InOut")//
+//                .autoStartup(isRouteEnabled)
+//                .log("bank information received: ${in.headers}")//
+//                .unmarshal().json(Booking.class)//
+//                .bean(bookingHandler, "book").marshal().json()
+//        ;
 
-
-        from("sjms2:" + jmsPrefix + "ticket?exchangePattern=InOut")
-                .autoStartup(isRouteEnabled)
-                .unmarshal().json(ETicket.class)
-                .bean(ticketingService, "emitTicket").marshal().json();
-
-
-        from("direct:ticketCancel")
-                .autoStartup(isRouteEnabled)
-                .marshal().json()
-                .to("sjms2:topic:" + jmsPrefix + "cancellation");
 
     }
 

@@ -1,6 +1,7 @@
 package fr.pantheonsorbonne.ufr27.miage.resources;
 
 import fr.pantheonsorbonne.ufr27.miage.camel.BankGateway;
+import fr.pantheonsorbonne.ufr27.miage.camel.FidelityGateway;
 import fr.pantheonsorbonne.ufr27.miage.dto.CompensationDTO;
 import fr.pantheonsorbonne.ufr27.miage.model.Compensation;
 import fr.pantheonsorbonne.ufr27.miage.service.CalculationService;
@@ -29,13 +30,15 @@ public class ClientResource {
 
     @Inject
     BankGateway bankGateway;
+    @Inject
+    FidelityGateway fidelityGateway;
     @Path(("/askRefund"))
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response askRefund(CompensationDTO compensationDTO) throws InterruptedException {
         Date currentDate = new Date();
         if (verificationService.isEligibleForRefund(compensationDTO.trainId(), compensationDTO.trajetId(), currentDate)&&verificationService.isRefundExecuted(compensationDTO.ticketId()).equals(Compensation.RefundStatus.ELIGIBLE)) {
-            //gate.sendFidelityInfoRequest(compensationDTO.clientId());
+            fidelityGateway.startCheckFidelityEvent(compensationDTO.clientID());
             insertService.insertCompensationType(compensationDTO); // need to put into camelRoutwe
 
             Thread.sleep(5000);
