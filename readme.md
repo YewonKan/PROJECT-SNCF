@@ -32,9 +32,6 @@ Politique de Compensation pour les Retards dans le Système de Réservation de T
 
 ## Interfaces
 
-```
-!!!! AJOUTER CETTE PARTIE !!!!
-```
 
 ![](DiagSequence.png)
 
