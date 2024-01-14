@@ -1,5 +1,7 @@
 package fr.pantheonsorbonne.ufr27.miage.resources;
 
+import fr.pantheonsorbonne.ufr27.miage.camel.BankGateway;
+import fr.pantheonsorbonne.ufr27.miage.camel.FidelityGateway;
 import fr.pantheonsorbonne.ufr27.miage.dto.CompensationDTO;
 import fr.pantheonsorbonne.ufr27.miage.model.Compensation;
 import fr.pantheonsorbonne.ufr27.miage.service.CalculationService;
@@ -12,7 +14,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.Date;
 
-@Path("Bank")
+@Path("g30")
 public class ClientResource {
 
     @Inject
@@ -26,25 +28,30 @@ public class ClientResource {
     @Inject
     InsertService insertService;
 
-    //@Inject
-    //bankGateway  bankGateway;
+    @Inject
+    BankGateway bankGateway;
+    @Inject
+    FidelityGateway fidelityGateway;
     @Path(("/askRefund"))
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Response askRefund(CompensationDTO compensationDTO) {
+    public Response askRefund(@QueryParam("idTrain") int idTrain,
+                              @QueryParam("trajetId") int trajetId,
+                              @QueryParam("clientId") int clientId,
+                              @QueryParam("ticketId") int ticketId) throws InterruptedException {
         Date currentDate = new Date();
-        if (verificationService.isEligibleForRefund(compensationDTO.trainId(), compensationDTO.trajetId(), currentDate)&&verificationService.isRefundExecuted(compensationDTO.ticketId()).equals(Compensation.RefundStatus.ELIGIBLE)) {
-  //          bankGateway.sendRefundResultToBank(compensationDTO.clientId());
-            insertService.insertCompensationType(compensationDTO);
-            return Response.accepted().build();
+        if (verificationService.isEligibleForRefund(idTrain,trajetId,currentDate)&&verificationService.isRefundExecuted(ticketId).equals(Compensation.RefundStatus.ELIGIBLE)) {
+            fidelityGateway.startCheckFidelityEvent(clientId);
+
+            Thread.sleep(5000);
+
+            Compensation c = verificationService.getCompensation(ticketId);
+            bankGateway.emitBankSendMessage(c);
+            updateService.updateStatusRefunded(ticketId);
+            return Response.accepted(c).build(); //must have status Refunded
         } else {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
     }
-    @Path(("/getPctCompensation"))
-    @POST
-    public Response getCompensPercentage(int trajetId, int trainId, int ticketId) {
-        double result = calculationService.getCompensationAmount(trajetId,trainId,ticketId);
-        return Response.ok(result).build();
-    }
+
 }

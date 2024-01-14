@@ -8,4 +8,7 @@ public interface ClientDAO {
     @Transactional
     Client createNewClient(String Cname, String Cstatus);
 
+    @Transactional
+    Client findClientById(int clientId);
+
 }

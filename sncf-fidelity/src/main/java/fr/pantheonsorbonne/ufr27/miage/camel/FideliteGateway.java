@@ -29,8 +29,9 @@ public class FideliteGateway {
 
         System.out.println("FideliteGateway - processG30Request called with client ID: " + client.getId());
 
-
-        String response = String.valueOf(fideliteService.verifyClientStatusInternal(client));
+        // Call the FideliteService method to verify the client status
+        // You need to adapt this based on the actual structure of your FideliteService methods
+        String response = String.valueOf(fideliteService.verifyClientStatus(client.getId()));
 
 
         System.out.println("FideliteGateway - processG30Request response: " + response);

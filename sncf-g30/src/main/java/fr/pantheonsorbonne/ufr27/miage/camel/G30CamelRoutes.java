@@ -31,16 +31,16 @@ public class G30CamelRoutes extends RouteBuilder {
     @Override
     public void configure() throws Exception {
 
-        from("direct:g30Request")
+        from("sjms2:queue:" + jmsPrefix + "fidelityToG30?exchangePattern=InOut")
                 .autoStartup(isRouteEnabled)
-                .log("Route G30CamelRoutes is called")
-                .to("sjms2:queue:" + jmsPrefix + "g30Request");
+                .marshal()
+                .json(CompensationDTO.class)
+                .log("Received Fidelity request: ${body}")
+                .process(new FidelityProcessor());
 
         from("sjms2:queue:" + jmsPrefix + "g30Request")
                 .autoStartup(isRouteEnabled)
                 .log("Received G30 request: ${body}")
-
-
                 .choice()
                 .when(simple("${body} == 'Response from Fidelity'"))
                 .log("Received successful response from Fidelity: ${body}")
@@ -110,4 +110,16 @@ public class G30CamelRoutes extends RouteBuilder {
             Log.info("Received delay notification: " + newDelayInformation);
         }
     }
+
+  
+    public class FidelityProcessor implements Processor {
+            private final ObjectMapper objectMapper = new ObjectMapper();
+    
+            @Override
+            public void process(Exchange exchange) throws Exception {
+                CompensationDTO compensationDTO = exchange.getIn().getBody(CompensationDTO.class);
+                insertService.insertCompensationType(compensationDTO);
+                Log.info("Received message on another queue: client Id - " + compensationDTO.clientID() + " has type - " + compensationDTO.type());
+            }
+        }
 }

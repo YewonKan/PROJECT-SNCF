@@ -2,6 +2,7 @@ package fr.pantheonsorbonne.ufr27.miage.service;
 import fr.pantheonsorbonne.ufr27.miage.dao.*;
 import fr.pantheonsorbonne.ufr27.miage.model.Compensation;
 import fr.pantheonsorbonne.ufr27.miage.model.DelayInformation;
+import fr.pantheonsorbonne.ufr27.miage.model.Motivation;
 import fr.pantheonsorbonne.ufr27.miage.model.TicketInformation;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -24,9 +25,7 @@ public class VerificationServiceImpl implements VerificationService {
         DelayInformation delayInformation = delayInformationDAO.findById(trajetId, trainId);
 
         // Check if the trip is delayed
-        boolean isDelayed = delayInformation != null;
-
-        if (isDelayed) {
+        if (delayInformation != null) {
             TicketInformation ticket = ticketInformationDAO.findRequestById(trajetId, trainId);
 
             // Check if the request is within 60 days
@@ -35,9 +34,16 @@ public class VerificationServiceImpl implements VerificationService {
             boolean isWithin60Days = daysDifference <= 60;
 
             // Check if the motivation is eligible
-            boolean isEligibleMotivation = motivationDAO.isEligibleMotivation(trajetId, trainId).getMotivationStatus();
+            Motivation motivation = motivationDAO.isEligibleMotivation(delayInformation.getDelayMotivation());
 
-            return isWithin60Days && isEligibleMotivation;
+            // Handle the case where motivation is null
+            if (motivation != null) {
+                boolean isEligibleMotivation = motivation.getMotivationStatus();
+                return isWithin60Days && isEligibleMotivation;
+            } else {
+                // Log or handle the case where motivation is null
+                return true;
+            }
         }
 
         return false; // Not eligible if the trip is not delayed
@@ -45,8 +51,19 @@ public class VerificationServiceImpl implements VerificationService {
 
 
     @Override
-    public Compensation.RefundStatus isRefundExecuted(int ticketId){
-        Compensation compensation =compensationDAO.findByIdTicket(ticketId);
+    public Compensation.RefundStatus isRefundExecuted(int ticketId) {
+        Compensation compensation = compensationDAO.findByIdTicket(ticketId);
+
+        // Check if compensation is null
+        if (compensation == null) {
+            return Compensation.RefundStatus.ELIGIBLE;
+        }
+
         return compensation.getStatusRefund();
+    }
+    @Override
+    public Compensation getCompensation(int ticketId){
+        Compensation compensation =compensationDAO.findByIdTicket(ticketId);
+        return compensation;
     }
 }
