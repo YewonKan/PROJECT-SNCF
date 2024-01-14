@@ -45,10 +45,10 @@ public class ClientResource {
 
             Thread.sleep(5000);
 
-            Compensation c = verificationService.getCompensation(ticketId);
+           /* Compensation c = verificationService.getCompensation(ticketId);
             bankGateway.emitBankSendMessage(c);
-            updateService.updateStatusRefunded(ticketId);
-            return Response.accepted(c).build(); //must have status Refunded
+            updateService.updateStatusRefunded(ticketId);*/
+            return Response.accepted().build(); //must have status Refunded
         } else {
             return Response.status(Response.Status.FORBIDDEN).build();
         }

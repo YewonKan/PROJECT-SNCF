@@ -23,9 +23,6 @@ public class FidelityGateway {
     @Inject
     ConnectionFactory connectionFactory;
 
-    @Inject
-    @ConfigProperty(name = "fr.pantheonsorbonne.ufr27.miage.jmsQueue")
-    String jmsQueueName; // Nom de la file JMS pour Fidelity
 
     public void startCheckFidelityEvent(int clientId) {
         try (JMSContext context = connectionFactory.createContext(JMSContext.AUTO_ACKNOWLEDGE)) {
