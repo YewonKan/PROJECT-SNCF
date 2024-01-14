@@ -35,11 +35,10 @@ Politique de Compensation pour les Retards dans le Système de Réservation de T
 ```
 !!!! AJOUTER CETTE PARTIE !!!!
 ```
-![](seqDiagram.png)
+![](DiagSequence.png)
 
 ## Schéma relationnel
 
-![](EER.png)
 
 ## Exigences fonctionnelles
 
@@ -51,5 +50,5 @@ Politique de Compensation pour les Retards dans le Système de Réservation de T
 
 ## Exigences non fonctionnelles
 
-* Les requêtes échangés entres systèmes doivent être fiables et sécurisées et donc utilisent le messaging
+* Les requêtes échangés entres systèmes doivent être fiables et sécurisées et donc utilise0nt0 le messaging
 * La confirmation  du remboursement et son opération  doivent être fiable

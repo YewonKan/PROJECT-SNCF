@@ -24,16 +24,18 @@ public class TicketInformation {
     @Column(name = "clientId", nullable = false)
     private Integer clientId;
 
+    @Column(name = "email", nullable = false)
+    private String email;
 
-    public TicketInformation(Integer ticketId, Integer trainId, Integer trajetId, Double prix, Integer clientId) {
-        this.ticketId = ticketId;
-        this.trainId = trainId;
-        this.trajetId = trajetId;
-        this.prix = prix;
-        this.clientId = clientId;
-    }
-    public TicketInformation() {
-    }
+    @Column(name = "fname", nullable = false)
+    private String fname;
+
+    @Column(name = "lname", nullable = false)
+    private String lname;
+
+    @Column(name = "phone", nullable = false)
+    private String phone;
+
 
     public Integer getTicketId() {
         return ticketId;
@@ -75,4 +77,35 @@ public class TicketInformation {
         this.clientId = clientId;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFname() {
+        return fname;
+    }
+
+    public void setFname(String fname) {
+        this.fname = fname;
+    }
+
+    public String getLname() {
+        return lname;
+    }
+
+    public void setLname(String lname) {
+        this.lname = lname;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 }

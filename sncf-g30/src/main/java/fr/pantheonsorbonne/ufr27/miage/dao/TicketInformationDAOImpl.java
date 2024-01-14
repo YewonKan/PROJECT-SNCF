@@ -26,6 +26,21 @@ public class TicketInformationDAOImpl implements TicketInformationDAO {
     @Override
     @Transactional
     public void insertTicketinfo(TicketInformation t) {
+
+        /*TicketInformation ticketInfo = new TicketInformation();
+        ticketInfo.setClientId(t.getClientId());
+        ticketInfo.setPrix(t.getPrix());
+        ticketInfo.setTicketId(t.getTicketId());
+        ticketInfo.setTrainId(t.getTrainId());
+        ticketInfo.setTrajetId(t.getTrajetId());*/
+
+        TicketInformation ticketInfo = new TicketInformation();
+        ticketInfo.setClientId(100);
+        ticketInfo.setPrix(123.3);
+        ticketInfo.setTicketId(322);
+        ticketInfo.setTrainId(4322);
+        ticketInfo.setTrajetId(54321);
+
         em.persist(t);
     }
 

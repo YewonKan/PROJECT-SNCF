@@ -2,7 +2,6 @@ package fr.pantheonsorbonne.ufr27.miage.service;
 
 import fr.pantheonsorbonne.ufr27.miage.dao.CompensationDAO;
 import fr.pantheonsorbonne.ufr27.miage.dao.DelayInformationDAO;
-import fr.pantheonsorbonne.ufr27.miage.dao.FideliteDAO;
 import fr.pantheonsorbonne.ufr27.miage.dao.TicketInformationDAO;
 import fr.pantheonsorbonne.ufr27.miage.dto.CompensationDTO;
 import fr.pantheonsorbonne.ufr27.miage.model.Compensation;
@@ -13,7 +12,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
+
 @ApplicationScoped
 public class InsertServiceImpl implements InsertService {
 
@@ -62,15 +61,25 @@ public class InsertServiceImpl implements InsertService {
 
     @Override
     public TicketInformation insertTicketInformation(TicketInformation ticketInformation) {
-        TicketInformation newTicketInformation = new TicketInformation(
+        TicketInformation newTicketInformation = new TicketInformation();
+
+            newTicketInformation.setClientId(ticketInformation.getClientId());
+            newTicketInformation.setPrix(ticketInformation.getPrix());
+            newTicketInformation.setTicketId(ticketInformation.getTicketId());
+            newTicketInformation.setTrainId(ticketInformation.getTrainId());
+            newTicketInformation.setTrajetId(ticketInformation.getTrajetId());
+
+        /*TicketInformation newTicketInformation = new TicketInformation(
                 ticketInformation.getTicketId(),
                 ticketInformation.getTrainId(),
                 ticketInformation.getTrajetId(),
                 ticketInformation.getPrix(),
                 ticketInformation.getClientId()
-        );
+        );*/
+
         ticketInformationDAO.insertTicketinfo(newTicketInformation);
         return newTicketInformation;
+
     }
 
 
