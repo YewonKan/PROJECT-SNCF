@@ -42,7 +42,6 @@ VALUES
     (4, 456, 60, 'Motivation 4', '2024-01-13 16:00:00'),
     (5, 567, 20, 'Motivation 5', '2024-01-13 18:15:00');
 
-
 CREATE TABLE IF NOT EXISTS delayMotivation (
                                                id INT AUTO_INCREMENT PRIMARY KEY,
                                                delayMotivation VARCHAR(100) NOT NULL,

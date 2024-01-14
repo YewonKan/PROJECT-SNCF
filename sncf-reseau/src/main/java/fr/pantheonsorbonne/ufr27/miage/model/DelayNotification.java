@@ -3,17 +3,18 @@ package fr.pantheonsorbonne.ufr27.miage.model;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
+
 @Entity
 public class DelayNotification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idDelayNotification", nullable = false)
-    private Long idDelayNotification;
-
     @Column(name = "idTrain", nullable = false)
-    private String idTrain;
+    private Integer idTrain;
 
+    @Column(name = "idTrajet", nullable = false)
+    private Integer idTrajet;
     @Column(name = "delayDuration", nullable = false)
     private int delayDuration;
 
@@ -21,12 +22,13 @@ public class DelayNotification {
     private String reason;
 
     @Column(name = "creationTime", nullable = false)
-    private String creationTime;
+    private Date creationTime;
 
 
 
-    public DelayNotification(String idTrain, int delayDuration, String reason, String creationTime) {
+    public DelayNotification(Integer idTrain, Integer idTrajet, int delayDuration, String reason, Date creationTime) {
         this.idTrain = idTrain;
+        this.idTrajet = idTrajet;
         this.delayDuration = delayDuration;
         this.reason = reason;
         this.creationTime = creationTime;
@@ -34,21 +36,17 @@ public class DelayNotification {
 
     public DelayNotification() {
     }
-    public Long getIdDelayNotification() {
-        return idDelayNotification;
-    }
 
-    public void setIdDelayNotification(Long idDelayNotification) {
-        this.idDelayNotification = idDelayNotification;
-    }
-
-    public String getIdTrain() {
+    public Integer getIdTrain() {
         return idTrain;
     }
 
-    public void setIdTrain(String idTrain) {
+    public void setIdTrain(Integer idTrain) {
         this.idTrain= idTrain;
     }
+
+    public Integer getIdTrajet(){return idTrajet;}
+    public void setIdTrajet(Integer idTrajet){this.idTrajet= idTrajet;}
 
     public int getDelayDuration() {
         return delayDuration;
@@ -66,11 +64,11 @@ public class DelayNotification {
         this.reason = reason;
     }
 
-    public String getCreationTime() {
+    public Date getCreationTime() {
         return creationTime;
     }
 
-    public void setCreationTime(String creationTime) {
+    public void setCreationTime(Date creationTime) {
         this.creationTime = creationTime;
     }
 }

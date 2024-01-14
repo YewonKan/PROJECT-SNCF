@@ -1,13 +1,16 @@
 package fr.pantheonsorbonne.ufr27.miage.camel;
 
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.pantheonsorbonne.ufr27.miage.dto.CompensationDTO;
+import fr.pantheonsorbonne.ufr27.miage.dto.DelayNotificationDTO;
+import fr.pantheonsorbonne.ufr27.miage.model.DelayInformation;
 import fr.pantheonsorbonne.ufr27.miage.service.InsertService;
 import io.quarkus.logging.Log;
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import fr.pantheonsorbonne.ufr27.miage.dto.CompensationDTO;
+import jakarta.enterprise.context.ApplicationScoped;
 import org.apache.camel.builder.RouteBuilder;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
@@ -41,19 +44,9 @@ public class G30CamelRoutes extends RouteBuilder {
     public class FidelityProcessor implements Processor {
         private final ObjectMapper objectMapper = new ObjectMapper();
 
-        @Override
-        public void process(Exchange exchange) throws Exception {
-            CompensationDTO compensationDTO = exchange.getIn().getBody(CompensationDTO.class);
-            insertService.insertCompensationType(compensationDTO);
-            Log.info("Received message on another queue: client Id - " + compensationDTO.clientID() + " has type - " + compensationDTO.type());
-        }
-    }
-
-    public class G30RequestProcessor implements Processor {
-        @Override
-        public void process(Exchange exchange) throws Exception {
-            // Process the message received on direct:g30Request endpoint
-            Log.info("Processing message from direct:g30Request: ${body}");
-        }
+        from("direct:processFidelityResponse")
+                .log("Processing successful response from Fidelity: ${body}")
+                // Add your logic to process the successful response from Fidelity
+                .to("sjms2:topic:" + jmsPrefix + "g30Response");  // Sending the response to a JMS topic
     }
 }
