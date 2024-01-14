@@ -35,9 +35,9 @@ public class CustomersDAOImpl implements CustomersDAO {
         c.setEmail(email);
         c.setPhone(phone);
 
-        em.persist(c); // Persistez l'objet Customers dans la base de données
+        em.persist(c);
 
-        return c; // Retournez l'objet Customers créé
+        return c;
     }
 
 }
