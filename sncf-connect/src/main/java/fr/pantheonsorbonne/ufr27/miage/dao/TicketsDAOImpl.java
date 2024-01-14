@@ -32,7 +32,6 @@ public class TicketsDAOImpl implements TicketsDAO {
     @Override
     @Transactional
     public Tickets createTicket(int idTrip, int idCustomer) throws CustomersNotFoundException, TripNotFoundException {
-       // Trip trip = (Trip) em.createQuery("Select t from Trip t where t.idTrip=:idTrip").setParameter("idTrip", idTrip).getSingleResult();
         Trip trip = em.find(Trip.class, idTrip);
 
         Customers customers = em.find(Customers.class, idCustomer);

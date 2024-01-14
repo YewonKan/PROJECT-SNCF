@@ -1,8 +1,7 @@
 package fr.pantheonsorbonne.ufr27.miage.resources;
 
 import fr.pantheonsorbonne.ufr27.miage.camel.BankGateway;
-import fr.pantheonsorbonne.ufr27.miage.camel.FidelityGateway;
-import fr.pantheonsorbonne.ufr27.miage.dto.CompensationDTO;
+import fr.pantheonsorbonne.ufr27.miage.camel.G30Gateway;
 import fr.pantheonsorbonne.ufr27.miage.model.Compensation;
 import fr.pantheonsorbonne.ufr27.miage.service.CalculationService;
 import fr.pantheonsorbonne.ufr27.miage.service.InsertService;
@@ -31,7 +30,7 @@ public class ClientResource {
     @Inject
     BankGateway bankGateway;
     @Inject
-    FidelityGateway fidelityGateway;
+    G30Gateway fidelityGateway;
     @Path(("/askRefund"))
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -44,10 +43,11 @@ public class ClientResource {
             fidelityGateway.startCheckFidelityEvent(clientId);
 
             Thread.sleep(5000);
-
+//Messaging gateway: B=G30 - Bank
            /* Compensation c = verificationService.getCompensation(ticketId);
             bankGateway.emitBankSendMessage(c);
             updateService.updateStatusRefunded(ticketId);*/
+
             return Response.accepted().build(); //must have status Refunded
         } else {
             return Response.status(Response.Status.FORBIDDEN).build();

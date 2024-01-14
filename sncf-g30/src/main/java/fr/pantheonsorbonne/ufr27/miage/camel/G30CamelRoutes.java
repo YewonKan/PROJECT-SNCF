@@ -2,7 +2,7 @@ package fr.pantheonsorbonne.ufr27.miage.camel;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.pantheonsorbonne.ufr27.miage.dto.DelayNotificationDTO;
-import fr.pantheonsorbonne.ufr27.miage.dto.CompensationDTO;
+import fr.pantheonsorbonne.ufr27.miage.dto.CompensationClientDTO;
 import fr.pantheonsorbonne.ufr27.miage.dto.TransmissionTicketDTO;
 import fr.pantheonsorbonne.ufr27.miage.model.DelayInformation;
 import fr.pantheonsorbonne.ufr27.miage.model.TicketInformation;
@@ -10,7 +10,6 @@ import fr.pantheonsorbonne.ufr27.miage.service.InsertService;
 import io.quarkus.logging.Log;
 import jakarta.inject.Inject;
 import org.apache.camel.Exchange;
-import org.apache.camel.Handler;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -37,7 +36,7 @@ public class G30CamelRoutes extends RouteBuilder {
         from("sjms2:M1." + jmsPrefix + "fidelityResponse")
                 .autoStartup(isRouteEnabled)
                 .marshal()
-                .json(CompensationDTO.class)
+                .json(CompensationClientDTO.class)
                 .log("Received Fidelity request: ${body}")
                 .process(new FidelityProcessor());
 
@@ -113,9 +112,9 @@ public class G30CamelRoutes extends RouteBuilder {
 
             String compensationJson = exchange.getIn().getBody(String.class);
 
-            CompensationDTO compensationDTO = objectMapper.readValue(compensationJson, CompensationDTO.class);
+            CompensationClientDTO compensationDTO = objectMapper.readValue(compensationJson, CompensationClientDTO.class);
             //insertService.insertCompensationType(compensationDTO);
-            Log.info("Received message on another queue: client Id - " + compensationDTO.clientID() + " has type - " + compensationDTO.type());
+            Log.info("Received message on another queue: client Id - " + compensationDTO.Client() + " has type - " + compensationDTO.type());
         }
     }
 }

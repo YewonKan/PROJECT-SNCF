@@ -4,15 +4,11 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.jms.ConnectionFactory;
 import jakarta.jms.JMSContext;
-import jakarta.jms.Queue;
 import org.apache.camel.CamelContext;
-import org.apache.camel.ProducerTemplate;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-import java.io.IOException;
-
 @ApplicationScoped
-public class FidelityGateway {
+public class G30Gateway {
 
     @Inject
     CamelContext camelContext;

@@ -9,7 +9,7 @@ import jakarta.persistence.TypedQuery;
 import java.util.List;
 
 @ApplicationScoped
-// Assuming this is part of a class annotated with @Repository or @Service
+
 public class MotivationDAOImpl implements MotivationDAO {
 
     @Inject

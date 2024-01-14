@@ -17,7 +17,7 @@ public class TicketInformationDAOImpl implements TicketInformationDAO {
     public TicketInformation findRequestById(int trajetId, int trainId) {
         return em.find(TicketInformation.class, trajetId);
     }
-    // gotta correct it
+    //correct it !!
     @Override
     public TicketInformation findRequestByIdTicket(int ticketId){
         return em.find(TicketInformation.class, ticketId);
