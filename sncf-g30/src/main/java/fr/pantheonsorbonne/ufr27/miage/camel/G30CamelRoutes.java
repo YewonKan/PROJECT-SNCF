@@ -3,6 +3,7 @@ package fr.pantheonsorbonne.ufr27.miage.camel;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.pantheonsorbonne.ufr27.miage.dto.DelayNotificationDTO;
+import fr.pantheonsorbonne.ufr27.miage.dto.CompensationDTO;
 import fr.pantheonsorbonne.ufr27.miage.dto.TransmissionTicketDTO;
 import fr.pantheonsorbonne.ufr27.miage.model.DelayInformation;
 import fr.pantheonsorbonne.ufr27.miage.model.TicketInformation;
@@ -38,7 +39,7 @@ public class G30CamelRoutes extends RouteBuilder {
                 .log("Received Fidelity request: ${body}")
                 .process(new FidelityProcessor());
 
-        from("sjms2:queue:" + jmsPrefix + "g30Request")
+        from("sjms2:M1.G30fidelity")
                 .autoStartup(isRouteEnabled)
                 .log("Received G30 request: ${body}")
                 .choice()
@@ -111,15 +112,16 @@ public class G30CamelRoutes extends RouteBuilder {
         }
     }
 
-  
-    public class FidelityProcessor implements Processor {
+
+  public class FidelityProcessor implements Processor {
             private final ObjectMapper objectMapper = new ObjectMapper();
     
             @Override
             public void process(Exchange exchange) throws Exception {
                 CompensationDTO compensationDTO = exchange.getIn().getBody(CompensationDTO.class);
-                insertService.insertCompensationType(compensationDTO);
+                //insertService.insertCompensationType(compensationDTO);
                 Log.info("Received message on another queue: client Id - " + compensationDTO.clientID() + " has type - " + compensationDTO.type());
             }
         }
 }
+

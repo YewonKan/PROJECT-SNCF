@@ -1,6 +1,6 @@
 package fr.pantheonsorbonne.ufr27.miage.camel;
 
-import fr.pantheonsorbonne.ufr27.miage.dto.CompensationDTO;
+
 import fr.pantheonsorbonne.ufr27.miage.model.Compensation;
 import fr.pantheonsorbonne.ufr27.miage.service.FideliteService;
 import io.quarkus.logging.Log;
@@ -24,8 +24,6 @@ public class FideliteCamelRoutes extends RouteBuilder {
     @Inject
     FidelityProcessor fidelityProcessor;
 
-
-
     @Inject
     FideliteGateway fideliteGateway;  // Injecting FideliteGateway
 
@@ -40,14 +38,13 @@ public class FideliteCamelRoutes extends RouteBuilder {
                 .to("sjms2:queue:"+jmsPrefix+"fidelityToG30?exchangePattern=InOut")
                 .unmarshal().json()*/
 
-        from("sjms2:queue:"+jmsPrefix+"G30ToFidelity?exchangePattern=InOut")  // Listening to the JMS queue for G30 requests
+        from("sjms2:M1.G30fidelity?exchangePattern=InOut")  // Listening to the JMS queue for G30 requests
                 .autoStartup(isRouteEnabled)
                 .log("Received G30 request: ${body}")
-                .log("After JSON Marshal: ${body}")
                 .process(fidelityProcessor)
                 .log("Test processor: ${body}")
+                .bean(fideliteGateway, "processG30Request")
                 .to("sjms2:queue:"+jmsPrefix+"fidelityToG30?exchangePattern=InOut")
-                .log("After JSON Marshal: ${body}")
                 .log("Response from fidelity : ${body}");
     }
     @ApplicationScoped

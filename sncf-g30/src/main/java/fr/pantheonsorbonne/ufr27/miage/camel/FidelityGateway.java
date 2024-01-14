@@ -1,10 +1,10 @@
 package fr.pantheonsorbonne.ufr27.miage.camel;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.jms.*;
+import jakarta.jms.ConnectionFactory;
+import jakarta.jms.JMSContext;
+import jakarta.jms.Queue;
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -16,14 +16,24 @@ public class FidelityGateway {
 
     @Inject
     CamelContext camelContext;
+
     @ConfigProperty(name = "fr.pantheonsorbonne.ufr27.miage.jmsPrefix")
     String jmsPrefix;
 
+    @Inject
+    ConnectionFactory connectionFactory;
+
+    @Inject
+    @ConfigProperty(name = "fr.pantheonsorbonne.ufr27.miage.jmsQueue")
+    String jmsQueueName; // Nom de la file JMS pour Fidelity
+
     public void startCheckFidelityEvent(int clientId) {
-        try (ProducerTemplate context = camelContext.createProducerTemplate()) {
-            context.sendBody("sjms2:queue:"+jmsPrefix+"G30ToFidelity?exchangePattern=InOut", clientId);
-        } catch (IOException e) {
-            Log.error("Erreur lors de l'envoi au fidelity: ", e);
+        try (JMSContext context = connectionFactory.createContext(JMSContext.AUTO_ACKNOWLEDGE)) {
+            // Créer le message JMS avec le corps du message
+            context.createProducer().send(context.createQueue("M1.G30fidelity"), clientId);
+        } catch (Exception e) {
+            throw new RuntimeException("Erreur lors de l'envoi au fidelity", e);
         }
     }
+
 }

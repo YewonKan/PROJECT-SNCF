@@ -38,7 +38,7 @@ public class FideliteGateway {
 
 
         try (ProducerTemplate producerTemplate = camelContext.createProducerTemplate()) {
-            producerTemplate.sendBodyAndHeader("sjms2:topic:" + jmsPrefix + "fidelityResponse", response, "clientId", client.getId());
+            producerTemplate.sendBodyAndHeader("sjms2:M1:" + jmsPrefix + "fidelityResponse", response, "clientId", client.getId());
         }
     }
 }
