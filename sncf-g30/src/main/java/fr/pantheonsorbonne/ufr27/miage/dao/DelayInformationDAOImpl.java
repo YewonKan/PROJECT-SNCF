@@ -5,12 +5,14 @@ import fr.pantheonsorbonne.ufr27.miage.model.DelayInformation;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 
 @ApplicationScoped
 public class DelayInformationDAOImpl implements DelayInformationDAO {
 
-    @Inject
+    @PersistenceContext(name = "mysql")
+
     EntityManager em;
 
     @Override
@@ -21,6 +23,7 @@ public class DelayInformationDAOImpl implements DelayInformationDAO {
     @Override
     @Transactional
     public DelayInformation insertDelayInformation(DelayInformation d){
+        d.setId(20);
         em.persist(d);
         return d;
     }

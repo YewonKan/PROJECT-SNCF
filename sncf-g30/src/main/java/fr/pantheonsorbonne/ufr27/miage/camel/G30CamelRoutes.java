@@ -1,6 +1,14 @@
 package fr.pantheonsorbonne.ufr27.miage.camel;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.pantheonsorbonne.ufr27.miage.dto.DelayNotificationDTO;
+import fr.pantheonsorbonne.ufr27.miage.model.DelayInformation;
+import fr.pantheonsorbonne.ufr27.miage.service.InsertService;
+import io.quarkus.logging.Log;
+import jakarta.inject.Inject;
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
@@ -14,6 +22,9 @@ public class G30CamelRoutes extends RouteBuilder {
 
     @ConfigProperty(name = "fr.pantheonsorbonne.ufr27.miage.jmsPrefix")
     String jmsPrefix;
+
+    @Inject
+    InsertService insertService;
 
     @Override
     public void configure() throws Exception {
@@ -44,7 +55,36 @@ public class G30CamelRoutes extends RouteBuilder {
 
         from("direct:processFidelityResponse")
                 .log("Processing successful response from Fidelity: ${body}")
+                // Add your logic to process the successful response from Fidelity
+                .to("sjms2:topic:" + jmsPrefix + "g30Response");  // Sending the response to a JMS topic
 
-                .to("sjms2:topic:" + jmsPrefix + "fidelityResponse");
+        from("sjms2:M1.delayNotification?exchangePattern=InOnly")
+                .autoStartup(isRouteEnabled)
+                .log("Received delay notification: ${body}")
+                .process(new DelayNotificationProcessor());
+    }
+    public class DelayNotificationProcessor implements Processor {
+
+        private final ObjectMapper objectMapper = new ObjectMapper();
+
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            // Récupérer le corps du message (la notification de retard en JSON)
+            String delayNotificationJson = exchange.getIn().getBody(String.class);
+
+            // Désérialiser la notification de retard en objet DelayNotification
+            DelayNotificationDTO delayNotification = objectMapper.readValue(delayNotificationJson, DelayNotificationDTO.class);
+            // Créer un objet DelayInformation à partir de DelayNotification
+            DelayInformation delayInformation = new DelayInformation();
+            delayInformation.setIdTrajet(delayNotification.idTrajet());
+            delayInformation.setIdTrain(delayNotification.idTrain());
+            delayInformation.setDelayedMinutes(delayNotification.delayDuration());
+            delayInformation.setDelayMotivation(delayNotification.reason());
+            delayInformation.setDelayedDate(delayNotification.creationTime());
+
+            // Appeler la méthode insertDelayInformation avec l'objet DelayInformation
+            DelayInformation newDelayInformation = insertService.insertDelayInformation(delayInformation);
+            Log.info("Received delay notification: " + newDelayInformation);
+        }
     }
 }

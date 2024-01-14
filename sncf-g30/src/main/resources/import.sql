@@ -32,7 +32,7 @@ INSERT INTO delay_information (idTicket, delayedMinutes, delayMotivation, refund
                                                                                             (3, 60, 'Weather conditions', true),
                                                                                             (4, 75, 'Staff shortage', false),
                                                                                             (5, 50, 'Unexpected event', true);
-
+*/
 
 CREATE TABLE IF NOT EXISTS delayMotivation (
    id INT AUTO_INCREMENT PRIMARY KEY,

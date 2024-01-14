@@ -6,6 +6,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 
+import java.util.Date;
+
 
 @ApplicationScoped
 public class DelayNotificationDAOImpl implements DelayNotificationDAO{
@@ -15,9 +17,12 @@ public class DelayNotificationDAOImpl implements DelayNotificationDAO{
 
     @Override
     @Transactional
-    public DelayNotification createNewDelayNotification(String idTrain, int delayDuration, String reason, String creationTime){
-        DelayNotification d = new DelayNotification(idTrain,delayDuration,reason,creationTime);
+    public DelayNotification createNewDelayNotification(Integer idTrain, Integer idTrajet, int delayDuration, String reason, Date creationTime){
+        DelayNotification d = new DelayNotification(idTrain,idTrajet,delayDuration,reason,creationTime);
+        d = em.merge(d);
+
         em.persist(d);
         return d;
     }
 }
+
