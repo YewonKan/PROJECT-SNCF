@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.pantheonsorbonne.ufr27.miage.exception.StatutClientManquantException;
 import fr.pantheonsorbonne.ufr27.miage.model.Client;
 import fr.pantheonsorbonne.ufr27.miage.service.FideliteServiceImpl;
+import io.quarkus.logging.Log;
 import jakarta.jms.ConnectionFactory;
 import jakarta.jms.JMSContext;
 import org.apache.camel.CamelContext;
@@ -34,7 +35,7 @@ public class G30Gateway {
     @Handler
     public void processG30Request(Client client) throws IOException, StatutClientManquantException {
 
-        System.out.println("FideliteGateway - processG30Request called with client ID: " + client.getId());
+        Log.info("??????????????????????" + client.getId());
 
         // Call the FideliteService method to verify the client status
         // You need to adapt this based on the actual structure of your FideliteService methods

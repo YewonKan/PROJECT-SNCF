@@ -26,9 +26,6 @@ public class NotificationDelayGateway {
     @ConfigProperty(name="fr.pantheonsorbonne.ufr27.miage.jmsPrefix")
     String jmsPrefix;
 
-    @Inject
-    CamelContext camelContext;
-
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public void sendDelayNotification(Integer idTrain, Integer idTrajet, int delayDuration, String reason, Date creationTime) {
@@ -36,10 +33,8 @@ public class NotificationDelayGateway {
 
             DelayNotification delayNotification = reseauService.sendDelayNotification(idTrain,idTrajet,delayDuration,reason,creationTime);
 
-            // Convertir DelayNotification object en JSON string
             String delayNotificationJson = objectMapper.writeValueAsString(delayNotification);
 
-            // Sending the delay notification message
             context.createProducer().send(context.createQueue("M1.delayNotification"),delayNotificationJson);
         } catch (IOException e) {
             throw new RuntimeException(e);
