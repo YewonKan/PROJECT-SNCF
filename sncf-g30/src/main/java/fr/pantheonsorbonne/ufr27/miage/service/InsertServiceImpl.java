@@ -2,9 +2,9 @@ package fr.pantheonsorbonne.ufr27.miage.service;
 
 import fr.pantheonsorbonne.ufr27.miage.dao.CompensationDAO;
 import fr.pantheonsorbonne.ufr27.miage.dao.DelayInformationDAO;
-import fr.pantheonsorbonne.ufr27.miage.dao.FideliteDAO;
 import fr.pantheonsorbonne.ufr27.miage.dao.TicketInformationDAO;
 import fr.pantheonsorbonne.ufr27.miage.dto.CompensationDTO;
+import fr.pantheonsorbonne.ufr27.miage.dto.TransmissionTicketDTO;
 import fr.pantheonsorbonne.ufr27.miage.model.Compensation;
 
 import fr.pantheonsorbonne.ufr27.miage.model.DelayInformation;
@@ -61,13 +61,14 @@ public class InsertServiceImpl implements InsertService {
     }
 
     @Override
-    public TicketInformation insertTicketInformation(TicketInformation ticketInformation) {
+    public TicketInformation insertTicketInformation(TransmissionTicketDTO ticketInformation) {
+        double prix = (ticketInformation.prix() != null) ? ticketInformation.prix().doubleValue() : 0.0;
         TicketInformation newTicketInformation = new TicketInformation(
-                ticketInformation.getTicketId(),
-                ticketInformation.getTrainId(),
-                ticketInformation.getTrajetId(),
-                ticketInformation.getPrix(),
-                ticketInformation.getClientId()
+                ticketInformation.ticketId(),
+                ticketInformation.trainId(),
+                ticketInformation.trajetId(),
+                prix,
+                ticketInformation.clientId()
         );
         ticketInformationDAO.insertTicketinfo(newTicketInformation);
         return newTicketInformation;

@@ -3,7 +3,9 @@ package fr.pantheonsorbonne.ufr27.miage.camel;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.pantheonsorbonne.ufr27.miage.dto.DelayNotificationDTO;
+import fr.pantheonsorbonne.ufr27.miage.dto.TransmissionTicketDTO;
 import fr.pantheonsorbonne.ufr27.miage.model.DelayInformation;
+import fr.pantheonsorbonne.ufr27.miage.model.TicketInformation;
 import fr.pantheonsorbonne.ufr27.miage.service.InsertService;
 import io.quarkus.logging.Log;
 import jakarta.inject.Inject;
@@ -62,7 +64,28 @@ public class G30CamelRoutes extends RouteBuilder {
                 .autoStartup(isRouteEnabled)
                 .log("Received delay notification: ${body}")
                 .process(new DelayNotificationProcessor());
+
+        from("sjms2:M1.SNCF_Connect_Ticket_Transmission?exchangePattern=InOnly")
+                .autoStartup(isRouteEnabled)
+                .process(new TicketTransmissionProcessor())
+                .log("Received Ticket Transmission request: ${body}");
     }
+
+    public class TicketTransmissionProcessor implements Processor {
+
+        private final ObjectMapper objectMapper = new ObjectMapper();
+
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            log.info("start function process");
+            String ticketInformationJson = exchange.getIn().getBody(String.class);
+            log.info("ticketInformationJson = " + ticketInformationJson );
+            TransmissionTicketDTO ticketTransmissionDTO = objectMapper.readValue(ticketInformationJson, TransmissionTicketDTO.class);
+            TicketInformation ticketInformation = insertService.insertTicketInformation(ticketTransmissionDTO);
+            Log.info("Received Ticket Transmission: SUCCESSFULLY " + ticketInformation);
+        }
+    }
+
     public class DelayNotificationProcessor implements Processor {
 
         private final ObjectMapper objectMapper = new ObjectMapper();
