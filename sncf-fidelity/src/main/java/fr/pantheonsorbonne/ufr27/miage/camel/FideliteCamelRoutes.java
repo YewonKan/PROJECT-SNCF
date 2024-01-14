@@ -23,26 +23,32 @@ public class FideliteCamelRoutes extends RouteBuilder {
 
     @Inject
     FidelityProcessor fidelityProcessor;
-    @Inject
-    CompensationDTO compensationDTO;
+
+
 
     @Inject
     FideliteGateway fideliteGateway;  // Injecting FideliteGateway
 
     @Override
     public void configure() throws Exception {
-
-        from("direct:g30Request")  // Listening to the JMS queue for G30 requests
+   /*     .from("direct:g30Request")
                 .autoStartup(isRouteEnabled)
                 .log("Received G30 request: ${body}")
-                .marshal()
-                .json()
+                .log("Before JSON Marshal: ${body}")
+                .marshal().json()
+                .log("After JSON Marshal: ${body}")
                 .to("sjms2:queue:"+jmsPrefix+"fidelityToG30?exchangePattern=InOut")
-                .unmarshal()
-                .json()
-                .log("Response from fidelity : ${body}")
-                .bean(fideliteGateway, "processG30Request")
-                .process(fidelityProcessor);
+                .unmarshal().json()*/
+
+        from("sjms2:queue:"+jmsPrefix+"G30ToFidelity?exchangePattern=InOut")  // Listening to the JMS queue for G30 requests
+                .autoStartup(isRouteEnabled)
+                .log("Received G30 request: ${body}")
+                .log("After JSON Marshal: ${body}")
+                .process(fidelityProcessor)
+                .log("Test processor: ${body}")
+                .to("sjms2:queue:"+jmsPrefix+"fidelityToG30?exchangePattern=InOut")
+                .log("After JSON Marshal: ${body}")
+                .log("Response from fidelity : ${body}");
     }
     @ApplicationScoped
     private static class FidelityProcessor implements Processor {

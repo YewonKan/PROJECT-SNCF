@@ -35,17 +35,19 @@ public class ClientResource {
     @Path(("/askRefund"))
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Response askRefund(CompensationDTO compensationDTO) throws InterruptedException {
+    public Response askRefund(@QueryParam("idTrain") int idTrain,
+                              @QueryParam("trajetId") int trajetId,
+                              @QueryParam("clientId") int clientId,
+                              @QueryParam("ticketId") int ticketId) throws InterruptedException {
         Date currentDate = new Date();
-        if (verificationService.isEligibleForRefund(compensationDTO.trainId(), compensationDTO.trajetId(), currentDate)&&verificationService.isRefundExecuted(compensationDTO.ticketId()).equals(Compensation.RefundStatus.ELIGIBLE)&&) {
-            fidelityGateway.startCheckFidelityEvent(compensationDTO.clientID());
-            insertService.insertCompensationType(compensationDTO); // need to put into camelRoutwe
+        if (verificationService.isEligibleForRefund(idTrain,trajetId,currentDate)&&verificationService.isRefundExecuted(ticketId).equals(Compensation.RefundStatus.ELIGIBLE)) {
+            fidelityGateway.startCheckFidelityEvent(clientId);
 
             Thread.sleep(5000);
 
-            Compensation c = verificationService.getCompensation(compensationDTO.ticketId());
+            Compensation c = verificationService.getCompensation(ticketId);
             bankGateway.emitBankSendMessage(c);
-            updateService.updateStatusRefunded(compensationDTO.ticketId());
+            updateService.updateStatusRefunded(ticketId);
             return Response.accepted(c).build(); //must have status Refunded
         } else {
             return Response.status(Response.Status.FORBIDDEN).build();

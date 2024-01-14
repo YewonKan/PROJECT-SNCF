@@ -32,7 +32,7 @@ public class FideliteGateway {
 
         // Call the FideliteService method to verify the client status
         // You need to adapt this based on the actual structure of your FideliteService methods
-        String response = String.valueOf(fideliteService.verifyClientStatusInternal(client));
+        String response = String.valueOf(fideliteService.verifyClientStatus(client.getId()));
 
         // Log the response
         System.out.println("FideliteGateway - processG30Request response: " + response);
