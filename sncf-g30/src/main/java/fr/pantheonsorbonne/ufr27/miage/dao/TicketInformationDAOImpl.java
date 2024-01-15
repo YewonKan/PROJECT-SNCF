@@ -5,13 +5,15 @@ import fr.pantheonsorbonne.ufr27.miage.model.TicketInformation;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 
 @ApplicationScoped
 public class TicketInformationDAOImpl implements TicketInformationDAO {
 
-    @Inject
+    @PersistenceContext(name = "mysql")
     EntityManager em;
+
 
     @Override
     public TicketInformation findRequestById(int trajetId, int trainId) {
@@ -26,7 +28,15 @@ public class TicketInformationDAOImpl implements TicketInformationDAO {
     @Override
     @Transactional
     public void insertTicketinfo(TicketInformation t) {
-        em.persist(t);
+        System.out.println("blbl");
+        TicketInformation newTicketInformation = new TicketInformation();
+        newTicketInformation.setClientId(t.getClientId());
+        newTicketInformation.setPrix(t.getPrix());
+        newTicketInformation.setTicketId(t.getTicketId());
+        newTicketInformation.setTrainId(t.getTrainId());
+        newTicketInformation.setTrajetId(t.getTrajetId());
+
+        em.persist(newTicketInformation);
     }
 
 }

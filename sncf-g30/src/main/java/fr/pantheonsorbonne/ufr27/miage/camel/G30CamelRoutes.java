@@ -9,6 +9,7 @@ import fr.pantheonsorbonne.ufr27.miage.model.TicketInformation;
 import fr.pantheonsorbonne.ufr27.miage.service.InsertService;
 import io.quarkus.logging.Log;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;

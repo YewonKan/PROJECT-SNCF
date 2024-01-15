@@ -1,13 +1,6 @@
 DROP TABLE IF EXISTS DelayNotification;
 
 
-CREATE TABLE DelayNotification (
-                                   idTrain INT AUTO_INCREMENT PRIMARY KEY,
-                                   idTrajet INT NOT NULL,
-                                   delayDuration INT NOT NULL,
-                                   reason VARCHAR(255) NOT NULL,
-                                   creationTime TIMESTAMP NOT NULL
-);
 
 
 INSERT INTO DelayNotification (idTrain, idTrajet, delayDuration, reason, creationTime) VALUES

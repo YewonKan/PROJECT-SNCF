@@ -9,6 +9,9 @@ public class TicketInformation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ticketIdInformation", nullable = false)
+    private Integer ticketIdInformation;
+
     @Column(name = "ticketId", nullable = false)
     private Integer ticketId;
 
@@ -25,14 +28,12 @@ public class TicketInformation {
     private Integer clientId;
 
 
-    public TicketInformation(Integer ticketId, Integer trainId, Integer trajetId, Double prix, Integer clientId) {
-        this.ticketId = ticketId;
-        this.trainId = trainId;
-        this.trajetId = trajetId;
-        this.prix = prix;
-        this.clientId = clientId;
+    public Integer getTicketIdInformation() {
+        return ticketIdInformation;
     }
-    public TicketInformation() {
+
+    public void setTicketIdInformation(Integer ticketIdInformation) {
+        this.ticketIdInformation = ticketIdInformation;
     }
 
     public Integer getTicketId() {

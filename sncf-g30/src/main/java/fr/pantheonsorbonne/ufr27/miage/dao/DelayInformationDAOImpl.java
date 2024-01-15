@@ -24,7 +24,7 @@ public class DelayInformationDAOImpl implements DelayInformationDAO {
     @Transactional
     public DelayInformation insertDelayInformation(DelayInformation d){
        // DelayInformation managedEntity = em.find(DelayInformation.class, d.getId());
-        em.persist(d);
+        em.merge(d);
         return d;
     }
 }

@@ -1,19 +1,7 @@
 -- Create tables if not exist
 
-CREATE TABLE IF NOT EXISTS Client (
-                                      id INT AUTO_INCREMENT PRIMARY KEY,
-                                      Cname VARCHAR(255),
-                                      Cstatus VARCHAR(255)
-);
 
-CREATE TABLE IF NOT EXISTS Compensation (
-                                            id INT AUTO_INCREMENT PRIMARY KEY,
-                                            client_id INT,
-                                            type VARCHAR(255),
-                                            details VARCHAR(255),
-                                            validity_date DATE,
-                                            FOREIGN KEY (client_id) REFERENCES Client(id)
-);
+
 
 -- Insert or replace data
 

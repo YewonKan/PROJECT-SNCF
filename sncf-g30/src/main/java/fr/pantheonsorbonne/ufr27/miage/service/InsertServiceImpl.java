@@ -13,6 +13,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 
 @ApplicationScoped
 public class InsertServiceImpl implements InsertService {
@@ -63,14 +64,14 @@ public class InsertServiceImpl implements InsertService {
     @Override
     public TicketInformation insertTicketInformation(TransmissionTicketDTO ticketInformation) {
         double prix = (ticketInformation.prix() != null) ? ticketInformation.prix().doubleValue() : 0.0;
-        TicketInformation newTicketInformation = new TicketInformation(
-                ticketInformation.ticketId(),
-                ticketInformation.trainId(),
-                ticketInformation.trajetId(),
-                prix,
-                ticketInformation.clientId()
-        );
-        ticketInformationDAO.insertTicketinfo(newTicketInformation);
+        TicketInformation newTicketInformation = new TicketInformation();
+               newTicketInformation.setClientId(ticketInformation.clientId());
+               newTicketInformation.setPrix(prix);
+               newTicketInformation.setTicketId(ticketInformation.ticketId());
+               newTicketInformation.setTrainId(ticketInformation.trainId());
+               newTicketInformation.setTrajetId(ticketInformation.trajetId());
+
+       ticketInformationDAO.insertTicketinfo(newTicketInformation);
         return newTicketInformation;
     }
 
